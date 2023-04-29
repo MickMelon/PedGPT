@@ -1,4 +1,4 @@
-﻿namespace PedGPT.Core;
+﻿namespace PedGPT.Core.Agents;
 
 public record Thoughts(
     string Text,

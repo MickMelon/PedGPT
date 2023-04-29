@@ -2,9 +2,12 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PedGPT.Core;
-using PedGPT.Core.Actions;
+using PedGPT.Core.Agents;
+using PedGPT.Core.Commands;
+using PedGPT.Core.Json;
+using PedGPT.Core.Memories;
 using PedGPT.Core.OpenAi;
+using PedGPT.Core.Prompts;
 
 var loggerFactory = LoggerFactory.Create(builder => builder
     .AddConsole(options =>
@@ -32,20 +35,18 @@ logger.LogInformation("Hello.");
 var openAiService = new OpenAiService(
     openAiApiKey, 
     new HttpClient(),
-    loggerFactory.CreateLogger<OpenAiService>());
+    loggerFactory.CreateLogger<OpenAiService>(),
+    new SystemTextJsonSerializer());
 
-var agent = new Agent(new Memory(), openAiService, loggerFactory.CreateLogger<Agent>());
+var agent = new AgentBuilder()
+    .WithName("Brian")
+    .WithGoal(new Goal("Check out the party at Grove Street.", 1))
+    .WithState(new AgentState("Health", "100/100"))
+    .WithCommand(CommandDescriptor.Create<WalkCommand>())
+    .WithCommand(CommandDescriptor.Create<DanceCommand>())
+    .Build(new Memory(), openAiService, loggerFactory.CreateLogger<Agent>(), new PromptGenerator());
 
-var actionMap = new Dictionary<string, Type>
-{
-    { "dance", typeof(DanceAction) },
-    { "walk", typeof(WalkAction) },
-};
-
-var agentRunner = new AgentRunner(
-    agent,
-    new ActionLocator(actionMap), 
-    loggerFactory.CreateLogger<AgentRunner>());
+var agentRunner = new AgentRunner(agent, loggerFactory.CreateLogger<AgentRunner>());
 
 await agentRunner.Run();
 
