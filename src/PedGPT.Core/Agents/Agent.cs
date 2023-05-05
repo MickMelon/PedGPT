@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PedGPT.Core.Commands;
+using PedGPT.Core.Json;
 using PedGPT.Core.Memories;
 using PedGPT.Core.OpenAi;
 using PedGPT.Core.Prompts;
@@ -13,43 +13,46 @@ public class Agent
     public List<Goal> Goals { get; init; }
     public List<AgentState> States { get; init; }
     public List<CommandDescriptor> Commands { get; init; }
-    public IMemory Memory;
+    public IMemoryStorage MemoryStorage;
 
     private readonly IOpenAiService _openAiService;
     private readonly ILogger<Agent> _logger;
     private readonly IPromptGenerator _promptGenerator;
+    private readonly IJsonSerializer _jsonSerializer;
 
     public Agent(
         string name,
         List<Goal> goals,
         List<AgentState> states,
         List<CommandDescriptor> commands,
-        IMemory memory,
+        IMemoryStorage memoryStorage,
         IOpenAiService openAiService,
         ILogger<Agent> logger,
-        IPromptGenerator promptGenerator)
+        IPromptGenerator promptGenerator,
+        IJsonSerializer jsonSerializer)
     {
         Name = name;
         Goals = goals;
         States = states;
         Commands = commands;
-        Memory = memory;
+        MemoryStorage = memoryStorage;
         _openAiService = openAiService;
         _logger = logger;
         _promptGenerator = promptGenerator;
+        _jsonSerializer = jsonSerializer;
     }
 
     public async Task<ThinkResult> Think()
     {
         var prompt = _promptGenerator.Generate(this);
 
-        var messages = new List<Message>
-        {
-            new("system", prompt),
-        };
+        var messages = new List<Message> { new("system", prompt) };
 
-        if (Memory.CommandsExecuted.Any()) 
-            messages.Add(new("system", Memory.CommandsExecuted.Last().Value.Message));
+        MemoryStorage.Memories.ForEach(memory =>
+        {
+            messages.Add(new("assistant", _jsonSerializer.Serialize(memory.ThinkResult)));
+            messages.Add(new("user", memory.ActResult.CommandResult.Message));
+        });
 
         _logger.LogInformation(string.Join("\n\n", messages.Select(_ => _.ToString())));
 
@@ -58,17 +61,17 @@ public class Agent
         var response = await _openAiService.Completion(messages);
 
         var choice = response.Choices.First();
+
+        var fixedJson = JsonFixer.FixJson(choice.Message.Content);
         
-        var thinkResult = JsonSerializer.Deserialize<ThinkResult>(choice.Message.Content);
+        var thinkResult = _jsonSerializer.Deserialize<ThinkResult>(fixedJson);
 
-        _logger.LogInformation("Think result: {thinkResult}", SerializeToJson(thinkResult!));
-
-        Memory.ThinkResults.Add(thinkResult!);
+        _logger.LogInformation("Think result: {thinkResult}", _jsonSerializer.Serialize(thinkResult!, format: true));
 
         return thinkResult!;
     }
 
-    public async Task Act(string commandName, Dictionary<string, string> args)
+    public async Task<ActResult> Act(string commandName, Dictionary<string, string> args)
     {
         var commandDescriptor = Commands.FirstOrDefault(_ => _.Name == commandName);
 
@@ -76,24 +79,22 @@ public class Agent
         {
             var commandNotFoundResult = new CommandResult(false, $"Unknown command '{commandName}'. Please refer to the 'Commands' list for available commands and only respond in the specified JSON format.");
 
-            _logger.LogInformation("Command result: {commandResult}", SerializeToJson(commandNotFoundResult));
+            _logger.LogInformation("Command result: {commandResult}", _jsonSerializer.Serialize(commandNotFoundResult, format: true));
 
-            Memory.CommandsExecuted.Add(new(commandName, commandNotFoundResult));
-
-            return;
+            return new(commandName, commandNotFoundResult);
         }
 
         var command = commandDescriptor.ToCommand(args);
 
         var commandResult = await command.Execute();
 
-        _logger.LogInformation("Command result: {commandResult}", SerializeToJson(commandResult));
+        _logger.LogInformation("Command result: {commandResult}", _jsonSerializer.Serialize(commandResult, format: true));
 
-        Memory.CommandsExecuted.Add(new(commandName, commandResult));
+        return new(commandName, commandResult);
     }
 
-    private static string SerializeToJson(object obj)
+    public void Observe(ThinkResult thinkResult, ActResult actResult)
     {
-        return JsonSerializer.Serialize(obj, new JsonSerializerOptions { WriteIndented = true });
+        MemoryStorage.Add(thinkResult, actResult);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using PedGPT.Core.Agents;
+﻿using PedGPT.Core.Agents;
 
 namespace PedGPT.Core.Prompts;
 
@@ -65,7 +64,7 @@ public class PromptGenerator : IPromptGenerator
         agent.Goals.ForEach(_ => promptBuilder.WithGoal(_.Description, _.Importance));
         agent.States.ForEach(_ => promptBuilder.WithState(_.Name, _.State));
         agent.Commands.ForEach(_ => promptBuilder.WithCommand(_.Name, _.Description ?? "", _.ArgsDescriptions));
-        promptBuilder.WithMemories(agent.Memory.ThinkResults.Select(_ => JsonSerializer.Serialize(_)));
+        //promptBuilder.WithMemories(agent.MemoryStorage.ThinkResults.Select(_ => JsonSerializer.Serialize(_)));
 
         var prompt = promptBuilder.Build();
 
