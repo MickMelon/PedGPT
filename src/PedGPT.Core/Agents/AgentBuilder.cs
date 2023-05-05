@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using PedGPT.Core.Commands;
+using PedGPT.Core.Json;
 using PedGPT.Core.Memories;
 using PedGPT.Core.OpenAi;
 using PedGPT.Core.Prompts;
@@ -38,10 +39,11 @@ public class AgentBuilder
     }
 
     public Agent Build(
-        IMemory memory,
+        IMemoryStorage memory,
         IOpenAiService openAiService,
         ILogger<Agent> logger,
-        IPromptGenerator promptGenerator)
+        IPromptGenerator promptGenerator,
+        IJsonSerializer jsonSerializer)
     {
         return new(
             _name, 
@@ -51,6 +53,7 @@ public class AgentBuilder
             memory,
             openAiService,
             logger,
-            promptGenerator);
+            promptGenerator,
+            jsonSerializer);
     }
 }

@@ -4,18 +4,19 @@ namespace PedGPT.Core.Json;
 
 public class SystemTextJsonSerializer : IJsonSerializer
 {
-    private readonly JsonSerializerOptions? _options = new()
+    private static JsonSerializerOptions Options => new()
     {
         Converters = { new ForceNumberToStringConverter() }
     };
 
-    public string Serialize(object obj)
+    public string Serialize(object obj, bool format)
     {
-        return JsonSerializer.Serialize(obj, _options);
+        if (format) Options.WriteIndented = true;
+        return JsonSerializer.Serialize(obj, Options);
     }
 
     public T? Deserialize<T>(string json)
     {
-        return JsonSerializer.Deserialize<T>(json, _options);
+        return JsonSerializer.Deserialize<T>(json, Options);
     }
 }

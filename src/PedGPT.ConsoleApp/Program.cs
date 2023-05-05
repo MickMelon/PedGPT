@@ -40,11 +40,14 @@ var openAiService = new OpenAiService(
 
 var agent = new AgentBuilder()
     .WithName("Brian")
-    .WithGoal(new Goal("Check out the party at Grove Street.", 1))
+    .WithGoal(new Goal("There is an injured player near you.", 1))
     .WithState(new AgentState("Health", "100/100"))
     .WithCommand(CommandDescriptor.Create<WalkCommand>())
     .WithCommand(CommandDescriptor.Create<DanceCommand>())
-    .Build(new Memory(), openAiService, loggerFactory.CreateLogger<Agent>(), new PromptGenerator());
+    .WithCommand(CommandDescriptor.Create<DriveToPositionCommand>())
+    .WithCommand(CommandDescriptor.Create<EnterVehicleCommand>())
+    .WithCommand(CommandDescriptor.Create<GpsCommand>())
+    .Build(new MemoryStorage(), openAiService, loggerFactory.CreateLogger<Agent>(), new PromptGenerator(), new SystemTextJsonSerializer());
 
 var agentRunner = new AgentRunner(agent, loggerFactory.CreateLogger<AgentRunner>());
 

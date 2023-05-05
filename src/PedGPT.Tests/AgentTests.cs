@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using PedGPT.Core.Agents;
 using PedGPT.Core.Commands;
+using PedGPT.Core.Json;
 using PedGPT.Core.Memories;
 using PedGPT.Core.OpenAi;
 using PedGPT.Core.Prompts;
@@ -17,25 +18,18 @@ public class AgentTests
     [Fact]
     public async Task ShouldParseOpenAiResponse()
     {
-        var openAiResponseJson = await File.ReadAllTextAsync("TestData/openai-response.json");
-
-        var openAiResponse = JsonSerializer.Deserialize<Response>(openAiResponseJson);
-
-        var openAiServiceMock = new Mock<IOpenAiService>();
-
-        openAiServiceMock
-            .Setup(_ => _.Completion(It.IsAny<List<Message>>(), It.IsAny<string>()))
-            .ReturnsAsync(openAiResponse!);
+        var openAiService = await MockOpenAiServiceWithJsonResponse("TestData/openai-responses/openai-response.json");
 
         var agent = new Agent(
             "Brian",
             new List<Goal>(),
             new List<AgentState>(),
             new List<CommandDescriptor>(),
-            new Memory(), 
-            openAiServiceMock.Object,
+            new MemoryStorage(), 
+            openAiService,
             Mock.Of<ILogger<Agent>>(),
-            new PromptGenerator());
+            new PromptGenerator(),
+            new SystemTextJsonSerializer());
 
         var thinkResult = await agent.Think();
 
@@ -52,5 +46,41 @@ public class AgentTests
             thinkResult.Command!.Name.Should().Be("drive_to");
             thinkResult.Command.Args.Should().Contain("destination", "police station");
         }
+    }
+
+    [Fact]
+    public async Task ShouldFixJson()
+    {
+        var openAiService = await MockOpenAiServiceWithJsonResponse("TestData/openai-responses/invalid-json-1.json");
+
+        var agent = new Agent(
+            "Brian",
+            new List<Goal>(),
+            new List<AgentState>(),
+            new List<CommandDescriptor>(),
+            new MemoryStorage(),
+            openAiService,
+            Mock.Of<ILogger<Agent>>(),
+            new PromptGenerator(),
+            new SystemTextJsonSerializer());
+
+        var thinkResult = await agent.Think();
+
+        thinkResult.Should().NotBeNull();
+    }
+
+    private static async Task<IOpenAiService> MockOpenAiServiceWithJsonResponse(string jsonFilePath)
+    {
+        var openAiResponseJson = await File.ReadAllTextAsync(jsonFilePath);
+
+        var openAiResponse = JsonSerializer.Deserialize<Response>(openAiResponseJson);
+
+        var openAiServiceMock = new Mock<IOpenAiService>();
+
+        openAiServiceMock
+            .Setup(_ => _.Completion(It.IsAny<List<Message>>(), It.IsAny<string>()))
+            .ReturnsAsync(openAiResponse!);
+
+        return openAiServiceMock.Object;
     }
 }

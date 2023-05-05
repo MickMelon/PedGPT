@@ -29,7 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestData\openai-response.json">
+    <None Update="TestData\openai-responses\invalid-json-1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\openai-responses\openai-response.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

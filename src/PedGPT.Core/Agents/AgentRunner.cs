@@ -30,7 +30,9 @@ public class AgentRunner
             {
                 var thinkResult = await _agent.Think();
 
-                await _agent.Act(thinkResult.Command?.Name ?? "none", thinkResult.Command?.Args ?? new());
+                var actResult = await _agent.Act(thinkResult.Command?.Name ?? "none", thinkResult.Command?.Args ?? new());
+
+                _agent.Observe(thinkResult, actResult);
             }
             catch (Exception exception)
             {
