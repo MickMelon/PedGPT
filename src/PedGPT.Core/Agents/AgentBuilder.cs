@@ -32,9 +32,9 @@ public class AgentBuilder
         return this;
     }
 
-    public AgentBuilder WithCommand(CommandDescriptor command)
+    public AgentBuilder WithCommand<T>() where T : ICommand
     {
-        _commands.Add(command);
+        _commands.Add(CommandDescriptor.Create<T>());
         return this;
     }
 

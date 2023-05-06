@@ -42,11 +42,11 @@ var agent = new AgentBuilder()
     .WithName("Brian")
     .WithGoal(new Goal("There is an injured player near you.", 1))
     .WithState(new AgentState("Health", "100/100"))
-    .WithCommand(CommandDescriptor.Create<WalkCommand>())
-    .WithCommand(CommandDescriptor.Create<DanceCommand>())
-    .WithCommand(CommandDescriptor.Create<DriveToPositionCommand>())
-    .WithCommand(CommandDescriptor.Create<EnterVehicleCommand>())
-    .WithCommand(CommandDescriptor.Create<GpsCommand>())
+    .WithCommand<WalkCommand>()
+    .WithCommand<DanceCommand>()
+    .WithCommand<DriveToPositionCommand>()
+    .WithCommand<EnterVehicleCommand>()
+    .WithCommand<GpsCommand>()
     .Build(new MemoryStorage(), openAiService, loggerFactory.CreateLogger<Agent>(), new PromptGenerator(), new SystemTextJsonSerializer());
 
 var agentRunner = new AgentRunner(agent, loggerFactory.CreateLogger<AgentRunner>());
