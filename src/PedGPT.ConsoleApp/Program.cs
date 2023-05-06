@@ -2,8 +2,8 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PedGPT.Application.Commands;
 using PedGPT.Core.Agents;
-using PedGPT.Core.Commands;
 using PedGPT.Core.Json;
 using PedGPT.Core.Memories;
 using PedGPT.Core.OpenAi;

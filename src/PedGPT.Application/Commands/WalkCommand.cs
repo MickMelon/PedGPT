@@ -1,4 +1,6 @@
-﻿namespace PedGPT.Core.Commands;
+﻿using PedGPT.Core.Commands;
+
+namespace PedGPT.Application.Commands;
 
 [CommandDescription("walk", "Walks to the specified coordinates.")]
 public record WalkCommand(float X, float Y, float Z) : ICommand

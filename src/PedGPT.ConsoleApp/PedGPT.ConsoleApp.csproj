@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PedGPT.Application\PedGPT.Application.csproj" />
     <ProjectReference Include="..\PedGPT.Core\PedGPT.Core.csproj" />
   </ItemGroup>
 

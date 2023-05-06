@@ -1,4 +1,6 @@
-﻿namespace PedGPT.Core.Commands;
+﻿using PedGPT.Core.Commands;
+
+namespace PedGPT.Application.Commands;
 
 [CommandDescription("drive_to_position", "Drives to the specified coordinates.")]
 public record DriveToPositionCommand(float X, float Y, float Z) : ICommand

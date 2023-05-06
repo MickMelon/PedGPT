@@ -1,4 +1,6 @@
-﻿namespace PedGPT.Core.Commands;
+﻿using PedGPT.Core.Commands;
+
+namespace PedGPT.Application.Commands;
 
 [CommandDescription("gps", "Gets the coordinates for a given location.")]
 public record GpsCommand(string Location) : ICommand

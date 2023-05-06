@@ -1,4 +1,6 @@
-﻿namespace PedGPT.Core.Commands;
+﻿using PedGPT.Core.Commands;
+
+namespace PedGPT.Application.Commands;
 
 [CommandDescription("dance", "Allows you to dance for joy.")]
 public record DanceCommand : ICommand

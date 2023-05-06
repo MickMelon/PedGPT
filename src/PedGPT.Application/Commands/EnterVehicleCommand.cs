@@ -1,4 +1,6 @@
-﻿namespace PedGPT.Core.Commands;
+﻿using PedGPT.Core.Commands;
+
+namespace PedGPT.Application.Commands;
 
 [CommandDescription("enter_vehicle", "Enters a vehicle with the given ID.")]
 public record EnterVehicleCommand(int Id) : ICommand

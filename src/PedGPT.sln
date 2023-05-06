@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.ConsoleApp", "PedGPT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Core", "PedGPT.Core\PedGPT.Core.csproj", "{92C412DD-C9FB-46EF-911F-C280119FE611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedGPT.Tests", "PedGPT.Tests\PedGPT.Tests.csproj", "{119F652A-2341-44C5-B4C3-1DBC31F2684B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Tests", "PedGPT.Tests\PedGPT.Tests.csproj", "{119F652A-2341-44C5-B4C3-1DBC31F2684B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedGPT.Application", "PedGPT.Application\PedGPT.Application.csproj", "{EAD75253-3500-4EF0-B837-5B88B4E83EFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
