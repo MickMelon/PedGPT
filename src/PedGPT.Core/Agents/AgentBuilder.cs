@@ -9,10 +9,15 @@ namespace PedGPT.Core.Agents;
 
 public class AgentBuilder
 {
-    private string _name { get; set; } = "";
-    private List<Goal> _goals { get; } = new();
-    private List<AgentState> _states { get; } = new();
-    private List<CommandDescriptor> _commands { get; } = new();
+    private string _name = "Agent";
+    private readonly List<Goal> _goals = new();
+    private readonly List<AgentState> _states = new();
+    private readonly List<CommandDescriptor> _commands = new();
+    private IMemoryStorage? _memory;
+    private IOpenAiService? _openAiService;
+    private ILogger<Agent>? _logger;
+    private IPromptGenerator? _promptGenerator;
+    private IJsonSerializer? _jsonSerializer;
 
     public AgentBuilder WithName(string name)
     {
@@ -38,22 +43,53 @@ public class AgentBuilder
         return this;
     }
 
-    public Agent Build(
-        IMemoryStorage memory,
-        IOpenAiService openAiService,
-        ILogger<Agent> logger,
-        IPromptGenerator promptGenerator,
-        IJsonSerializer jsonSerializer)
+    public AgentBuilder WithMemory(IMemoryStorage memory)
     {
+        _memory = memory;
+        return this;
+    }
+
+    public AgentBuilder WithOpenAiService(IOpenAiService openAiService)
+    {
+        _openAiService = openAiService;
+        return this;
+    }
+
+    public AgentBuilder WithLogger(ILogger<Agent> logger)
+    {
+        _logger = logger;
+        return this;
+    }
+
+    public AgentBuilder WithPromptGenerator(IPromptGenerator promptGenerator)
+    {
+        _promptGenerator = promptGenerator;
+        return this;
+    }
+
+    public AgentBuilder WithJsonSerializer(IJsonSerializer jsonSerializer)
+    {
+        _jsonSerializer = jsonSerializer;
+        return this;
+    }
+
+    public Agent Build()
+    {
+        if (_memory is null) throw new InvalidOperationException("Agent requires memory storage.");
+        if (_openAiService is null) throw new InvalidOperationException("Agent requires OpenAI service.");
+        if (_logger is null) throw new InvalidOperationException("Agent requires logger.");
+        if (_promptGenerator is null) throw new InvalidOperationException("Agent requires prompt generator.");
+        if (_jsonSerializer is null) throw new InvalidOperationException("Agent requires JSON serializer.");
+
         return new(
             _name, 
             _goals, 
             _states,
             _commands,
-            memory,
-            openAiService,
-            logger,
-            promptGenerator,
-            jsonSerializer);
+            _memory,
+            _openAiService,
+            _logger,
+            _promptGenerator,
+            _jsonSerializer);
     }
 }

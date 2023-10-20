@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PedGPT.Application.Commands;
 using PedGPT.Core.Agents;
@@ -40,14 +38,19 @@ var openAiService = new OpenAiService(
 
 var agent = new AgentBuilder()
     .WithName("Brian")
-    .WithGoal(new Goal("There is an injured player near you.", 1))
+    .WithGoal(new Goal("There is a party going on near Grove Street.", 1))
     .WithState(new AgentState("Health", "100/100"))
     .WithCommand<WalkCommand>()
     .WithCommand<DanceCommand>()
     .WithCommand<DriveToPositionCommand>()
     .WithCommand<EnterVehicleCommand>()
     .WithCommand<GpsCommand>()
-    .Build(new MemoryStorage(), openAiService, loggerFactory.CreateLogger<Agent>(), new PromptGenerator(), new SystemTextJsonSerializer());
+    .WithMemory(new MemoryStorage())
+    .WithOpenAiService(openAiService)
+    .WithLogger(loggerFactory.CreateLogger<Agent>())
+    .WithPromptGenerator(new PromptGenerator())
+    .WithJsonSerializer(new SystemTextJsonSerializer())
+    .Build();
 
 var agentRunner = new AgentRunner(agent, loggerFactory.CreateLogger<AgentRunner>());
 

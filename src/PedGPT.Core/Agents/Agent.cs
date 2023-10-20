@@ -66,7 +66,7 @@ public class Agent
         
         var thinkResult = _jsonSerializer.Deserialize<ThinkResult>(fixedJson);
 
-        _logger.LogInformation("Think result: {thinkResult}", _jsonSerializer.Serialize(thinkResult!, format: true));
+        _logger.LogInformation($"Think result: {_jsonSerializer.Serialize(thinkResult!, format: true)}");
 
         return thinkResult!;
     }
