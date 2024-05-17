@@ -3,16 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.ConsoleApp", "PedGPT.ConsoleApp\PedGPT.ConsoleApp.csproj", "{7FD6E265-2402-4480-A464-48F03D1D8D80}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Core", "PedGPT.Core\PedGPT.Core.csproj", "{92C412DD-C9FB-46EF-911F-C280119FE611}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Tests", "PedGPT.Tests\PedGPT.Tests.csproj", "{119F652A-2341-44C5-B4C3-1DBC31F2684B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Application", "PedGPT.Application\PedGPT.Application.csproj", "{EAD75253-3500-4EF0-B837-5B88B4E83EFC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.Core", "IntelliPed.Core\IntelliPed.Core.csproj", "{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.ConsoleApp", "IntelliPed.ConsoleApp\IntelliPed.ConsoleApp.csproj", "{F16E4B1E-8D56-4414-94D7-08695692A7EF}"
@@ -27,22 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7FD6E265-2402-4480-A464-48F03D1D8D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7FD6E265-2402-4480-A464-48F03D1D8D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7FD6E265-2402-4480-A464-48F03D1D8D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7FD6E265-2402-4480-A464-48F03D1D8D80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92C412DD-C9FB-46EF-911F-C280119FE611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92C412DD-C9FB-46EF-911F-C280119FE611}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92C412DD-C9FB-46EF-911F-C280119FE611}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92C412DD-C9FB-46EF-911F-C280119FE611}.Release|Any CPU.Build.0 = Release|Any CPU
-		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{119F652A-2341-44C5-B4C3-1DBC31F2684B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,12 +36,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{7FD6E265-2402-4480-A464-48F03D1D8D80} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
-		{92C412DD-C9FB-46EF-911F-C280119FE611} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
-		{119F652A-2341-44C5-B4C3-1DBC31F2684B} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
-		{EAD75253-3500-4EF0-B837-5B88B4E83EFC} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B6CD71A-E904-4B6B-B518-05FEAED51052}
