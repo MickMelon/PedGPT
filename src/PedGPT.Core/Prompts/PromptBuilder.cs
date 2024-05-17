@@ -56,15 +56,15 @@ public class PromptBuilder
 
     public string Build()
     {
-        var prompt = new StringBuilder();
+        StringBuilder? prompt = new StringBuilder();
 
         prompt.AppendLine(_setup);
 
         if (_constraints.Any())
         {
-            var constraints = new StringBuilder();
+            StringBuilder? constraints = new StringBuilder();
             constraints.AppendLine("Constraints:");
-            foreach (var constraint in _constraints)
+            foreach (string? constraint in _constraints)
             {
                 constraints.AppendLine($"- {constraint}");
             }
@@ -73,9 +73,9 @@ public class PromptBuilder
 
         if (_performanceEvaluations.Any())
         {
-            var performanceEvaluations = new StringBuilder();
+            StringBuilder? performanceEvaluations = new StringBuilder();
             performanceEvaluations.AppendLine("Performance Evaluations:");
-            foreach (var evaluation in _performanceEvaluations)
+            foreach (string? evaluation in _performanceEvaluations)
             {
                 performanceEvaluations.AppendLine($"- {evaluation}");
             }
@@ -84,13 +84,13 @@ public class PromptBuilder
 
         if (_commands.Any())
         {
-            var commands = new StringBuilder();
+            StringBuilder? commands = new StringBuilder();
             commands.AppendLine("Commands:");
-            for (var i = 0; i < _commands.Count; i++)
+            for (int i = 0; i < _commands.Count; i++)
             {
-                var (name, description, argsDescriptions) = _commands[i];
+                (string? name, string? description, Dictionary<string, string>? argsDescriptions) = _commands[i];
 
-                var argsDescriptionsStr = argsDescriptions is not null && argsDescriptions.Any()
+                string? argsDescriptionsStr = argsDescriptions is not null && argsDescriptions.Any()
                     ? string.Join(", ", argsDescriptions.Select(_ => $"\"{_.Key}\": \"{_.Value}\""))
                     : "none";
 
@@ -101,9 +101,9 @@ public class PromptBuilder
 
         if (_states.Any())
         {
-            var states = new StringBuilder();
+            StringBuilder? states = new StringBuilder();
             states.AppendLine("Your Current State:");
-            foreach (var (name, state) in _states)
+            foreach ((string? name, string? state) in _states)
             {
                 states.AppendLine($"- {name}: {state}");
             }
@@ -112,9 +112,9 @@ public class PromptBuilder
 
         if (_goals.Any())
         {
-            var goals = new StringBuilder();
+            StringBuilder? goals = new StringBuilder();
             goals.AppendLine("Your Goals (highest importance first):");
-            foreach (var (description, importance) in _goals.OrderByDescending(_ => _.Item2))
+            foreach ((string? description, double importance) in _goals.OrderByDescending(_ => _.Item2))
             {
                 goals.AppendLine($"- {description} (importance: {importance})");
             }

@@ -18,9 +18,9 @@ public class AgentTests
     [Fact]
     public async Task ShouldParseOpenAiResponse()
     {
-        var openAiService = await MockOpenAiServiceWithJsonResponse("TestData/openai-responses/openai-response.json");
+        IOpenAiService? openAiService = await MockOpenAiServiceWithJsonResponse("TestData/openai-responses/openai-response.json");
 
-        var agent = new Agent(
+        Agent? agent = new Agent(
             "Brian",
             new List<Goal>(),
             new List<AgentState>(),
@@ -31,7 +31,7 @@ public class AgentTests
             new PromptGenerator(),
             new SystemTextJsonSerializer());
 
-        var thinkResult = await agent.Think();
+        ThinkResult? thinkResult = await agent.Think();
 
         thinkResult.Should().NotBeNull();
 
@@ -51,9 +51,9 @@ public class AgentTests
     [Fact]
     public async Task ShouldFixJson()
     {
-        var openAiService = await MockOpenAiServiceWithJsonResponse("TestData/openai-responses/invalid-json-1.json");
+        IOpenAiService? openAiService = await MockOpenAiServiceWithJsonResponse("TestData/openai-responses/invalid-json-1.json");
 
-        var agent = new Agent(
+        Agent? agent = new Agent(
             "Brian",
             new List<Goal>(),
             new List<AgentState>(),
@@ -64,18 +64,18 @@ public class AgentTests
             new PromptGenerator(),
             new SystemTextJsonSerializer());
 
-        var thinkResult = await agent.Think();
+        ThinkResult? thinkResult = await agent.Think();
 
         thinkResult.Should().NotBeNull();
     }
 
     private static async Task<IOpenAiService> MockOpenAiServiceWithJsonResponse(string jsonFilePath)
     {
-        var openAiResponseJson = await File.ReadAllTextAsync(jsonFilePath);
+        string? openAiResponseJson = await File.ReadAllTextAsync(jsonFilePath);
 
-        var openAiResponse = JsonSerializer.Deserialize<Response>(openAiResponseJson);
+        Response? openAiResponse = JsonSerializer.Deserialize<Response>(openAiResponseJson);
 
-        var openAiServiceMock = new Mock<IOpenAiService>();
+        Mock<IOpenAiService>? openAiServiceMock = new Mock<IOpenAiService>();
 
         openAiServiceMock
             .Setup(_ => _.Completion(It.IsAny<List<Message>>(), It.IsAny<string>()))

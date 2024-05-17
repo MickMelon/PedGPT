@@ -25,23 +25,23 @@ public class OpenAiService : IOpenAiService
 
     public async Task<Response> Completion(List<Message> messages, string model = "gpt-3.5-turbo")
     {
-        var request = new Request(model, messages);
+        Request? request = new Request(model, messages);
 
         _logger.LogTrace("Sending request to chat/completions.");
 
-        var httpResponse = await _httpClient.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", request);
+        HttpResponseMessage? httpResponse = await _httpClient.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", request);
 
         _logger.LogTrace($"Request returned {httpResponse.StatusCode} status code.");
         
-        var contentString = await httpResponse.Content.ReadAsStringAsync();
+        string? contentString = await httpResponse.Content.ReadAsStringAsync();
 
         _logger.LogTrace("Response content: {responseContent}", contentString);
 
         httpResponse.EnsureSuccessStatusCode();
 
-        var fixedJson = JsonFixer.FixJson(contentString);
+        string? fixedJson = JsonFixer.FixJson(contentString);
 
-        var response = _jsonSerializer.Deserialize<Response>(fixedJson);
+        Response? response = _jsonSerializer.Deserialize<Response>(fixedJson);
 
         _logger.LogInformation($"Tokens used: {response!.Usage.TotalTokens}");
 

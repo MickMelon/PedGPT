@@ -10,20 +10,20 @@ public record CommandDescriptor(
 {
     public ICommand ToCommand(Dictionary<string, string> args)
     {
-        var constructorInfo = CommandType.GetConstructors().First();
-        var parameters = constructorInfo.GetParameters();
-        var parameterValues = parameters.Select(p => Convert.ChangeType(args[p.Name!], p.ParameterType)).ToArray();
+        ConstructorInfo? constructorInfo = CommandType.GetConstructors().First();
+        ParameterInfo[]? parameters = constructorInfo.GetParameters();
+        object[]? parameterValues = parameters.Select(p => Convert.ChangeType(args[p.Name!], p.ParameterType)).ToArray();
 
         return (ICommand)constructorInfo.Invoke(parameterValues);
     }
 
     public static CommandDescriptor Create<TCommand>() where TCommand : ICommand
     {
-        var commandType = typeof(TCommand);
+        Type? commandType = typeof(TCommand);
 
-        var (name, description) = ExtractCommandDescription(commandType);
+        (string? name, string? description) = ExtractCommandDescription(commandType);
 
-        var commandDescriptor = new CommandDescriptor(
+        CommandDescriptor? commandDescriptor = new CommandDescriptor(
             typeof(TCommand),
             name,
             description,
@@ -34,7 +34,7 @@ public record CommandDescriptor(
 
     private static (string, string) ExtractCommandDescription(Type commandType)
     {
-        var attribute = commandType.GetCustomAttribute<CommandDescriptionAttribute>();
+        CommandDescriptionAttribute? attribute = commandType.GetCustomAttribute<CommandDescriptionAttribute>();
 
         if (attribute is null)
             throw new InvalidOperationException($"Command '{commandType.Name}' does not have a CommandDescriptionAttribute.");
@@ -44,8 +44,8 @@ public record CommandDescriptor(
 
     private static Dictionary<string, string> ExtractArgsDescription(Type commandType)
     {
-        var constructorInfo = commandType.GetConstructors().First();
-        var parameters = constructorInfo.GetParameters();
+        ConstructorInfo? constructorInfo = commandType.GetConstructors().First();
+        ParameterInfo[]? parameters = constructorInfo.GetParameters();
 
         return parameters.ToDictionary(_ => _.Name!, _ => _.ParameterType.ToString());
     }

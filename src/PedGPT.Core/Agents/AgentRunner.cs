@@ -28,9 +28,9 @@ public class AgentRunner
         {
             try
             {
-                var thinkResult = await _agent.Think();
+                ThinkResult? thinkResult = await _agent.Think();
 
-                var actResult = await _agent.Act(thinkResult.Command?.Name ?? "none", thinkResult.Command?.Args ?? new());
+                ActResult? actResult = await _agent.Act(thinkResult.Command?.Name ?? "none", thinkResult.Command?.Args ?? new());
 
                 _agent.Observe(thinkResult, actResult);
             }
