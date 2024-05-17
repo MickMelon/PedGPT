@@ -54,7 +54,7 @@ public class PromptGenerator : IPromptGenerator
 
     public string Generate(Agent agent)
     {
-        var promptBuilder = new PromptBuilder();
+        PromptBuilder? promptBuilder = new PromptBuilder();
 
         promptBuilder.WithSetup($"Your name is {agent.Name}. {_setup}");
         promptBuilder.WithResponseFormat(_responseFormat);
@@ -66,7 +66,7 @@ public class PromptGenerator : IPromptGenerator
         agent.Commands.ForEach(_ => promptBuilder.WithCommand(_.Name, _.Description ?? "", _.ArgsDescriptions));
         //promptBuilder.WithMemories(agent.MemoryStorage.ThinkResults.Select(_ => JsonSerializer.Serialize(_)));
 
-        var prompt = promptBuilder.Build();
+        string? prompt = promptBuilder.Build();
 
         return prompt;
     }

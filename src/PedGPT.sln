@@ -9,7 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Core", "PedGPT.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Tests", "PedGPT.Tests\PedGPT.Tests.csproj", "{119F652A-2341-44C5-B4C3-1DBC31F2684B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedGPT.Application", "PedGPT.Application\PedGPT.Application.csproj", "{EAD75253-3500-4EF0-B837-5B88B4E83EFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedGPT.Application", "PedGPT.Application\PedGPT.Application.csproj", "{EAD75253-3500-4EF0-B837-5B88B4E83EFC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.Core", "IntelliPed.Core\IntelliPed.Core.csproj", "{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.ConsoleApp", "IntelliPed.ConsoleApp\IntelliPed.ConsoleApp.csproj", "{F16E4B1E-8D56-4414-94D7-08695692A7EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.FiveM.Client", "IntelliPed.FiveM.Client\IntelliPed.FiveM.Client.csproj", "{A8318136-1CB5-4B6E-99F3-25420ADE1331}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.FiveM.Server", "IntelliPed.FiveM.Server\IntelliPed.FiveM.Server.csproj", "{3BB5874B-0236-4961-BECE-A6D38B92EACE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +43,31 @@ Global
 		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAD75253-3500-4EF0-B837-5B88B4E83EFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8547D29-E7DD-4617-9FB8-DFFDEBC391CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F16E4B1E-8D56-4414-94D7-08695692A7EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F16E4B1E-8D56-4414-94D7-08695692A7EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F16E4B1E-8D56-4414-94D7-08695692A7EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F16E4B1E-8D56-4414-94D7-08695692A7EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8318136-1CB5-4B6E-99F3-25420ADE1331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8318136-1CB5-4B6E-99F3-25420ADE1331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8318136-1CB5-4B6E-99F3-25420ADE1331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8318136-1CB5-4B6E-99F3-25420ADE1331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BB5874B-0236-4961-BECE-A6D38B92EACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BB5874B-0236-4961-BECE-A6D38B92EACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BB5874B-0236-4961-BECE-A6D38B92EACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BB5874B-0236-4961-BECE-A6D38B92EACE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7FD6E265-2402-4480-A464-48F03D1D8D80} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
+		{92C412DD-C9FB-46EF-911F-C280119FE611} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
+		{119F652A-2341-44C5-B4C3-1DBC31F2684B} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
+		{EAD75253-3500-4EF0-B837-5B88B4E83EFC} = {1B8F4FDD-6730-4A47-A2F3-BE2CC14287BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3B6CD71A-E904-4B6B-B518-05FEAED51052}

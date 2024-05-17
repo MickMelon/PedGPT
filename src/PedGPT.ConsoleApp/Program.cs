@@ -9,7 +9,7 @@ using PedGPT.Core.Memories;
 using PedGPT.Core.OpenAi;
 using PedGPT.Core.Prompts;
 
-var loggerFactory = LoggerFactory.Create(builder => builder
+ILoggerFactory? loggerFactory = LoggerFactory.Create(builder => builder
     .AddConsole(options =>
     {
 #pragma warning disable CS0618
@@ -18,27 +18,27 @@ var loggerFactory = LoggerFactory.Create(builder => builder
     })
     .SetMinimumLevel(LogLevel.Trace));
 
-var logger = loggerFactory.CreateLogger<Program>();
+ILogger<Program>? logger = loggerFactory.CreateLogger<Program>();
 
-var configBuilder = new ConfigurationBuilder()
+IConfigurationBuilder? configBuilder = new ConfigurationBuilder()
     .AddUserSecrets<Program>();
 
-var config = configBuilder.Build();
+IConfigurationRoot? config = configBuilder.Build();
 
-var openAiApiKey = config["OpenAi:ApiKey"];
+string? openAiApiKey = config["OpenAi:ApiKey"];
 
 if (string.IsNullOrWhiteSpace(openAiApiKey))
     throw new Exception("OpenAi:ApiKey is not set in user secrets.");
 
 logger.LogInformation("Hello.");
 
-var openAiService = new OpenAiService(
+OpenAiService? openAiService = new OpenAiService(
     openAiApiKey, 
     new HttpClient(),
     loggerFactory.CreateLogger<OpenAiService>(),
     new SystemTextJsonSerializer());
 
-var agent = new AgentBuilder()
+Agent? agent = new AgentBuilder()
     .WithName("Brian")
     .WithGoal(new Goal("There is an injured player near you.", 1))
     .WithState(new AgentState("Health", "100/100"))
@@ -49,7 +49,7 @@ var agent = new AgentBuilder()
     .WithCommand<GpsCommand>()
     .Build(new MemoryStorage(), openAiService, loggerFactory.CreateLogger<Agent>(), new PromptGenerator(), new SystemTextJsonSerializer());
 
-var agentRunner = new AgentRunner(agent, loggerFactory.CreateLogger<AgentRunner>());
+AgentRunner? agentRunner = new AgentRunner(agent, loggerFactory.CreateLogger<AgentRunner>());
 
 await agentRunner.Run();
 

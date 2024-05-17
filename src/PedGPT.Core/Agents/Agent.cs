@@ -44,9 +44,9 @@ public class Agent
 
     public async Task<ThinkResult> Think()
     {
-        var prompt = _promptGenerator.Generate(this);
+        string prompt = _promptGenerator.Generate(this);
 
-        var messages = new List<Message> { new("system", prompt) };
+        List<Message> messages = new List<Message> { new("system", prompt) };
 
         MemoryStorage.Memories.ForEach(memory =>
         {
@@ -58,13 +58,13 @@ public class Agent
 
         _logger.LogInformation("Thinking...");
 
-        var response = await _openAiService.Completion(messages);
+        Response response = await _openAiService.Completion(messages);
 
-        var choice = response.Choices.First();
+        Choice choice = response.Choices.First();
 
-        var fixedJson = JsonFixer.FixJson(choice.Message.Content);
+        string fixedJson = JsonFixer.FixJson(choice.Message.Content);
         
-        var thinkResult = _jsonSerializer.Deserialize<ThinkResult>(fixedJson);
+        ThinkResult? thinkResult = _jsonSerializer.Deserialize<ThinkResult>(fixedJson);
 
         _logger.LogInformation("Think result: {thinkResult}", _jsonSerializer.Serialize(thinkResult!, format: true));
 
@@ -73,20 +73,20 @@ public class Agent
 
     public async Task<ActResult> Act(string commandName, Dictionary<string, string> args)
     {
-        var commandDescriptor = Commands.FirstOrDefault(_ => _.Name == commandName);
+        CommandDescriptor? commandDescriptor = Commands.FirstOrDefault(_ => _.Name == commandName);
 
         if (commandDescriptor is null)
         {
-            var commandNotFoundResult = new CommandResult(false, $"Unknown command '{commandName}'. Please refer to the 'Commands' list for available commands and only respond in the specified JSON format.");
+            CommandResult commandNotFoundResult = new CommandResult(false, $"Unknown command '{commandName}'. Please refer to the 'Commands' list for available commands and only respond in the specified JSON format.");
 
             _logger.LogInformation("Command result: {commandResult}", _jsonSerializer.Serialize(commandNotFoundResult, format: true));
 
             return new(commandName, commandNotFoundResult);
         }
 
-        var command = commandDescriptor.ToCommand(args);
+        ICommand command = commandDescriptor.ToCommand(args);
 
-        var commandResult = await command.Execute();
+        CommandResult commandResult = await command.Execute();
 
         _logger.LogInformation("Command result: {commandResult}", _jsonSerializer.Serialize(commandResult, format: true));
 
