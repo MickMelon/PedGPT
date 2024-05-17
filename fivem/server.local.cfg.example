@@ -1,0 +1,28 @@
+exec ..\server.cfg
+
+# Remove the `#` from the below line if you want your server to be listed as 'private' in the server browser.
+# Do not edit it if you *do not* want your server listed as 'private'.
+# Check the following url for more detailed information about this:
+# https://docs.fivem.net/docs/server-manual/server-commands/#sv_master1-newvalue
+sv_master1 ""
+
+# Server player slot limit (see https://fivem.net/server-hosting for limits)
+sv_maxclients 1
+
+# Steam Web API key, if you want to use Steam authentication (https://steamcommunity.com/dev/apikey)
+# -> replace "" with the key
+set steam_webApiKey ""
+
+# License key for your server (https://keymaster.fivem.net)
+sv_licenseKey ""
+
+# Enables some additional logging for developers. Typically not of use to a regular user.
+developer 1
+
+# The resmon command will open the resource monitor. 
+# The resource monitor monitors the CPU usage and memory usage for each resource and shows this in a nice overview. 
+# Comes in handy when you encounter performance issues during gameplay.
+resmon 1
+
+# Uncomment this and set a password to enable RCON. Make sure to change the password - it should look like rcon_password "YOURPASSWORD"
+#rcon_password ""
