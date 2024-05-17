@@ -8,8 +8,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  build-dotnet-core:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,13 +16,22 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       working-directory: ./src
-      run: dotnet restore
+      run: |
+        for proj in $(find . -name "*.csproj" -not -name "*FiveM*"); do
+          dotnet restore "$proj"
+        done
     - name: Build
       working-directory: ./src
-      run: dotnet build --no-restore
+      run: |
+        for proj in $(find . -name "*.csproj" -not -name "*FiveM*"); do
+          dotnet build "$proj" --no-restore
+        done
     - name: Test
       working-directory: ./src
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        for proj in $(find . -name "*.csproj" -not -name "*FiveM*"); do
+          dotnet test "$proj" --no-build --verbosity normal
+        done
