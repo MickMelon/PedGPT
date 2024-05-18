@@ -1,3 +1,4 @@
 [submodule "fivem/cfx-server-data"]
 	path = fivem/cfx-server-data
 	url = https://github.com/citizenfx/cfx-server-data.git
+	ignore = dirty
