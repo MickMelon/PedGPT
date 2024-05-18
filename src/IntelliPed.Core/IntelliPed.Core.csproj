@@ -21,4 +21,8 @@
     <PackageReference Include="Microsoft.SemanticKernel.Planners.Handlebars" Version="1.7.0-preview" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj" />
+  </ItemGroup>
+
 </Project>
