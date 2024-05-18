@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Net.Http.Json;
 using System.Numerics;
+using IntelliPed.FiveM.Messages.Navigation;
 using Microsoft.SemanticKernel;
 
 namespace IntelliPed.Core.Plugins;
@@ -12,7 +14,21 @@ public class NavigationPlugin
         Kernel kernel,
         [Description("The co-ordinate.")] Vector3 coordinate)
     {
-        await Task.Delay(1000);
+        HttpClient httpClient = new();
+
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync("http://localhost:5000/api/navigation/move-to-position", new MoveToPositionRequest
+        {
+            X = coordinate.X,
+            Y = coordinate.Y,
+            Z = coordinate.Z,
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"Failed to navigate to ({coordinate.X}, {coordinate.Y}, {coordinate.Z})");
+            return "Failed to navigate.";
+        }
+
         Console.WriteLine($"Successfully navigated to ({coordinate.X}, {coordinate.Y}, {coordinate.Z})");
         return "Successfully navigated.";
     }
