@@ -9,7 +9,7 @@ param(
 # Build
 Push-Location -Path "$PSScriptRoot\..\src"
 try {
-    & dotnet build Missions.sln
+    & dotnet build PedGPT.sln
 }
 finally {
     Pop-Location
