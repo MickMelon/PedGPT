@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using FxMediator.Server;
 using IntelliPed.FiveM.Server.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
-using Debug = CitizenFX.Core.Debug;
 
 namespace IntelliPed.FiveM.Server;
 
@@ -23,6 +23,8 @@ public class Program : BaseScript
         {
             return;
         }
+
+        BaseScriptProxy baseScriptProxy = new(Players);
 
         IConfigurationRoot config = new ConfigurationBuilder()
             .AddEnvironmentVariables(prefix: "ASPNETCORE_")
@@ -40,6 +42,9 @@ public class Program : BaseScript
                 services.AddSingleton<ObjectPoolProvider>(new DefaultObjectPoolProvider());
                 services.AddSingleton<IHostingEnvironment>(new HostingEnvironment());
                 services.AddSingleton<DiagnosticSource>(new DiagnosticListener("IntelliPed"));
+
+                services.AddSingleton(baseScriptProxy);
+                services.AddSingleton<ServerMediator>();
             })
             .Configure(app =>
             {
@@ -50,7 +55,5 @@ public class Program : BaseScript
             .Build();
 
         await Task.Run(host.Run);
-
-        Debug.WriteLine("IntelliPed.FiveM.Server has been started.");
     }
 }

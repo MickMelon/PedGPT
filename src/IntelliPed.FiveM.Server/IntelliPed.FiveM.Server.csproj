@@ -22,6 +22,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj" />
+    <ProjectReference Include="..\IntelliPed.FiveM.Shared\IntelliPed.FiveM.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FxMediator.Server.net">
+      <HintPath>..\..\..\FxMediator\src\FxMediator.Server\bin\Debug\netstandard2.0\FxMediator.Server.net.dll</HintPath>
+    </Reference>
+    <Reference Include="FxMediator.Shared">
+      <HintPath>..\..\..\FxMediator\src\FxMediator.Shared\bin\Debug\FxMediator.Shared.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

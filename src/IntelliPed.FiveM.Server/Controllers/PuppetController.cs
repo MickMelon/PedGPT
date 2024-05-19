@@ -1,34 +1,45 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using CitizenFX.Core;
-using CitizenFX.Core.Native;
+using FxMediator.Server;
 using IntelliPed.FiveM.Messages.Puppets;
+using IntelliPed.FiveM.Server.Controllers.Shared;
+using IntelliPed.FiveM.Shared.Requests.Puppets;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IntelliPed.FiveM.Server.Controllers;
 
 [Route("api/[controller]")]
-public class PuppetController : Controller
+public class PuppetController : AppController
 {
+    private readonly BaseScriptProxy _baseScriptProxy;
+    private readonly ServerMediator _mediator;
+
+    public PuppetController(BaseScriptProxy baseScriptProxy, ServerMediator mediator)
+    {
+        _baseScriptProxy = baseScriptProxy;
+        _mediator = mediator;
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create()
     {
-        await BaseScript.Delay(0);
+        await SwitchToMainThread();
 
-        int pedHandle = API.CreatePed(0, (uint) API.GetHashKey("csb_agent"), 0f, 0f, 72f, 0f, true, true);
+        Player player = _baseScriptProxy.Players.First();
 
-        if (pedHandle == 0)
+        CreatePuppetRpcReply reply = await _mediator.SendToClient(player, new CreatePuppetRpcRequest
         {
-            Debug.WriteLine("Failed to create ped.");
-            return BadRequest("Failed to create ped.");
-        }
+            X = 0f,
+            Y = 0f,
+            Z = 72f,
+        });
 
-        Ped ped = new(pedHandle);
-
-        Debug.WriteLine($"Created ped with ID {ped.NetworkId}");
+        Debug.WriteLine($"Created ped with ID {reply.PedNetworkId}");
 
         return Ok(new CreatePuppetReply
         {
-            PedNetworkId = ped.NetworkId,
+            PedNetworkId = reply.PedNetworkId,
         });
     }
 }
