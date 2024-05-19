@@ -10,11 +10,17 @@ namespace IntelliPed.Core.Agents;
 
 public class Agent
 {
+    public int PedNetworkId { get; }
+
     private readonly Kernel _kernel;
     
-    public Agent(OpenAiOptions openAiOptions)
+    public Agent(int pedNetworkId, OpenAiOptions openAiOptions)
     {
+        PedNetworkId = pedNetworkId;
+
         IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
+
+        kernelBuilder.Services.AddSingleton(this);
 
         kernelBuilder.Services.AddLogging(_ => _
             .SetMinimumLevel(LogLevel.Trace)
