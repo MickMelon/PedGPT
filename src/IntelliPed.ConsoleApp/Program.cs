@@ -1,6 +1,7 @@
-﻿using IntelliPed.Core.Agents;
+﻿using System.Net.Http.Json;
+using IntelliPed.Core.Agents;
+using IntelliPed.FiveM.Messages.Puppets;
 using Microsoft.Extensions.Configuration;
-
 
 IConfigurationBuilder configBuilder = new ConfigurationBuilder()
     .AddUserSecrets<Program>();
@@ -14,6 +15,14 @@ OpenAiOptions openAiOptions = new()
     Model = "gpt-4o"
 };
 
-Agent agent = new(openAiOptions);
+HttpClient httpClient = new();
+
+HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5000/api/puppet", null);
+
+response.EnsureSuccessStatusCode();
+
+CreatePuppetReply? reply = await response.Content.ReadFromJsonAsync<CreatePuppetReply>();
+
+Agent agent = new(reply!.PedNetworkId, openAiOptions);
 
 await agent.Think();
