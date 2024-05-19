@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.FiveM.Client", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelliPed.FiveM.Server", "IntelliPed.FiveM.Server\IntelliPed.FiveM.Server.csproj", "{3BB5874B-0236-4961-BECE-A6D38B92EACE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.FiveM.Messages", "IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj", "{8C3E55A3-6518-45EF-A7E2-F84CBAB064BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelliPed.FiveM.Messages", "IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj", "{8C3E55A3-6518-45EF-A7E2-F84CBAB064BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliPed.FiveM.Shared", "IntelliPed.FiveM.Shared\IntelliPed.FiveM.Shared.csproj", "{25E9A728-BA59-4DC7-AD4A-2D4BA154EE22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{8C3E55A3-6518-45EF-A7E2-F84CBAB064BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C3E55A3-6518-45EF-A7E2-F84CBAB064BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C3E55A3-6518-45EF-A7E2-F84CBAB064BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25E9A728-BA59-4DC7-AD4A-2D4BA154EE22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25E9A728-BA59-4DC7-AD4A-2D4BA154EE22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25E9A728-BA59-4DC7-AD4A-2D4BA154EE22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25E9A728-BA59-4DC7-AD4A-2D4BA154EE22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

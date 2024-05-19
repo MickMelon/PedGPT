@@ -13,8 +13,28 @@ public class Program : BaseScript
             return;
         }
 
-        Debug.WriteLine("Client resource started");
-
+        API.SetPoliceIgnorePlayer(API.PlayerId(), true);
+        API.SetDispatchCopsForPlayer(API.PlayerId(), false);
+        API.SetMaxWantedLevel(0);
         API.SetEntityCoords(API.PlayerPedId(), 0f, 0f, 72f, false, false, false, false);
+
+        Debug.WriteLine("Client resource started");
+    }
+
+    //[Tick]
+    //public async Task OnTick()
+    //{
+    //    // Disable the wanted level
+    //    API.SetPlayerWantedLevel(API.PlayerId(), 0, false);
+    //    API.SetPlayerWantedLevelNow(API.PlayerId(), false);
+
+    //    await Delay(1000); // Wait for 1 second before checking again
+    //}
+
+    [Command("gun")]
+    public void GiveGun()
+    {
+        // don't ask me why I'm giving a gun to the player >:)
+        API.GiveWeaponToPed(API.PlayerPedId(), (uint) API.GetHashKey("weapon_pistol"), 999, false, true);
     }
 }

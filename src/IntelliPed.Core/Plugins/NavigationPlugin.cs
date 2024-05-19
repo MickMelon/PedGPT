@@ -43,8 +43,8 @@ public class NavigationPlugin
         [Description("The location.")] string location)
     {
         await Task.Delay(250);
-        Console.WriteLine($"The co-ordinates of {location} are (12, 13, -44)");
-        return new Coordinates(12, 13, -44);
+        Console.WriteLine($"The co-ordinates of {location} are (-831, 172, 70)");
+        return new Coordinates(-831, 172, 70);
     }
 }
 
