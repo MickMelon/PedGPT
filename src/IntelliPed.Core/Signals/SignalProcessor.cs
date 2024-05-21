@@ -33,7 +33,7 @@ public class SignalProcessor
         _cancellationTokenSource.Cancel();
     }
 
-    public void Handle(Signal signal)
+    public void HandleSignal(Signal signal)
     {
         _signalQueue.Enqueue(signal);
     }
@@ -51,25 +51,14 @@ public class SignalProcessor
             // Process signal
             IChatCompletionService chatService = _agent.Kernel.GetRequiredService<IChatCompletionService>();
 
-            ChatHistory chat = new(
-                """
-                 You are a ped in Grand Theft Auto V who is fully autonomous. Your goals are to freeroam. 
-                 
-                 Your decisions must always be made independently without seeking user assistance. 
-                 Play to your strengths as an LLM and pursue simple strategies with no legal complications.
-                 
-                 You must make use of your reasoning and decision-making capabilities to respond to the signal.
-                 Be realistic and think about what a ped would do in this situation.
-                 
-                 You may invoke kernel functions.
-                 """);
+            ChatHistory chat = new("You are a ped living in the city of Los Santos, San Andreas.");
 
-            chat.AddUserMessage(signal.ToString());
+            chat.AddUserMessage($"You just have received the following signal: {signal}. How would you like to react?");
 
             ChatMessageContent result = await chatService.GetChatMessageContentAsync(chat, new OpenAIPromptExecutionSettings
             {
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
-            }, kernel: _agent.Kernel, cancellationToken: cancellationToken);
+            });
 
             Console.WriteLine($"Result: {result}");
         }

@@ -1,7 +1,5 @@
 ﻿using IntelliPed.Core.Plugins;
 using IntelliPed.Core.Signals;
-using IntelliPed.Messages.Signals;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
@@ -10,13 +8,14 @@ namespace IntelliPed.Core.Agents;
 
 public class Agent
 {
+    public int PedNetworkId { get; }
     public Kernel Kernel { get; }
-    public HubConnection HubConnection { get; }
-    private readonly SignalProcessor _signalProcessor;
-
-    public Agent(OpenAiOptions openAiOptions)
+    public SignalProcessor SignalProcessor { get; }
+    
+    public Agent(int pedNetworkId, OpenAiOptions openAiOptions)
     {
-        _signalProcessor = new(this);
+        PedNetworkId = pedNetworkId;
+        SignalProcessor = new(this);
 
         HubConnection = new HubConnectionBuilder()
             .WithUrl("http://localhost:5000/agent-hub")
@@ -35,17 +34,5 @@ public class Agent
             .AddFromType<SpeechPlugin>();
 
         Kernel = kernelBuilder.Build();
-    }
-
-    public async Task Start()
-    {
-        await HubConnection.StartAsync();
-
-        await HubConnection.InvokeAsync("CreatePuppet");
-
-        HubConnection.On<DamageSignal>("DamageReceived", _signalProcessor.Handle);
-        HubConnection.On<SpeechSignal>("SpeechHeard", _signalProcessor.Handle);
-
-        _signalProcessor.Start();
     }
 }

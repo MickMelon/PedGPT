@@ -1,4 +1,6 @@
 ﻿using IntelliPed.Core.Agents;
+using IntelliPed.Core.Signals;
+using IntelliPed.FiveM.Messages.Puppets;
 using Microsoft.Extensions.Configuration;
 
 IConfigurationBuilder configBuilder = new ConfigurationBuilder()
@@ -12,10 +14,23 @@ OpenAiOptions openAiOptions = new()
     OrgId = config["OpenAi:OrgId"] ?? throw new InvalidOperationException("OpenAi:ApiKey is required"),
     Model = "gpt-3.5-turbo-0125"
 };
-
-Agent agent = new(openAiOptions);
+HttpClient httpClient = new();
 
 await agent.Start();
+
+response.EnsureSuccessStatusCode();
+
+CreatePuppetReply? reply = await response.Content.ReadFromJsonAsync<CreatePuppetReply>();
+
+Agent agent = new(reply!.PedNetworkId, openAiOptions);
+
+agent.SignalProcessor.Start();
+agent.SignalProcessor.HandleSignal(new DamageSignal
+{
+    DamageAmount = 1337, 
+    Source = "Player",
+    Weapon = "Desert Eagle",
+});
 
 // Create a ManualResetEventSlim to keep the application running
 ManualResetEventSlim waitHandle = new(false);
