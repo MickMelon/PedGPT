@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Agents\" />
+    <Folder Include="Signals\" />
     <Folder Include="Plugins\" />
-    <Folder Include="Sensors\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,8 +17,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.12.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Planners.Handlebars" Version="1.7.0-preview" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.13.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.13.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.13.0-alpha" />
   </ItemGroup>
 
   <ItemGroup>
