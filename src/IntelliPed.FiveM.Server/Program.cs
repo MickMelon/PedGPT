@@ -4,6 +4,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FxMediator.Server;
 using IntelliPed.FiveM.Server.Controllers;
+using IntelliPed.FiveM.Server.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
@@ -45,11 +46,17 @@ public class Program : BaseScript
 
                 services.AddSingleton(baseScriptProxy);
                 services.AddSingleton<ServerMediator>();
+
+                services.AddSignalR();
             })
             .Configure(app =>
             {
                 app.UseCors();
                 app.UseMvcWithDefaultRoute();
+                app.UseSignalR(configure =>
+                {
+                    configure.MapHub<MyHub>("/my-hub");
+                });
             })
             .ConfigureLogging(_ => _.AddConsole())
             .Build();

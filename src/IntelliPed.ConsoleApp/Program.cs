@@ -2,7 +2,14 @@
 using IntelliPed.Core.Agents;
 using IntelliPed.Core.Signals;
 using IntelliPed.FiveM.Messages.Puppets;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
+
+await SignalR();
+
+// Create a ManualResetEventSlim to keep the application running
+ManualResetEventSlim waitHandle = new(false);
+waitHandle.Wait();
 
 IConfigurationBuilder configBuilder = new ConfigurationBuilder()
     .AddUserSecrets<Program>();
@@ -33,6 +40,36 @@ agent.SignalProcessor.HandleSignal(new DamageSignal
     Weapon = "Desert Eagle",
 });
 
-// Create a ManualResetEventSlim to keep the application running
-ManualResetEventSlim waitHandle = new(false);
-waitHandle.Wait();
+
+
+static async Task SignalR()
+{
+    // Create a connection to the SignalR hub
+    var connection = new HubConnectionBuilder()
+        .WithUrl("http://localhost:5000/my-hub")
+        .Build();
+
+    // Register a handler for messages from the hub
+    connection.On<string, string>("ReceiveMessage", (user, message) =>
+    {
+        Console.WriteLine($"{user}: {message}");
+    });
+
+    try
+    {
+        // Start the connection
+        await connection.StartAsync();
+        Console.WriteLine("Connection started");
+
+        // Send a message to the hub
+        await connection.InvokeAsync("SendMessage", "ConsoleClient", "Hello from the console app!");
+
+        // Keep the console open
+        Console.WriteLine("Press any key to exit");
+        Console.ReadKey();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+    }
+}
