@@ -1,5 +1,6 @@
 ﻿using IntelliPed.Core.Plugins;
 using IntelliPed.Core.Signals;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
@@ -8,14 +9,17 @@ namespace IntelliPed.Core.Agents;
 
 public class Agent
 {
-    public int PedNetworkId { get; }
     public Kernel Kernel { get; }
-    public SignalProcessor SignalProcessor { get; }
-    
-    public Agent(int pedNetworkId, OpenAiOptions openAiOptions)
+    public HubConnection HubConnection { get; }
+    private readonly SignalProcessor _signalProcessor;
+
+    public Agent(OpenAiOptions openAiOptions)
     {
-        PedNetworkId = pedNetworkId;
-        SignalProcessor = new(this);
+        _signalProcessor = new(this);
+
+        HubConnection = new HubConnectionBuilder()
+            .WithUrl("http://localhost:5000/agent-hub")
+            .Build();
 
         IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
 
@@ -28,5 +32,19 @@ public class Agent
         kernelBuilder.Plugins.AddFromType<NavigationPlugin>();
 
         Kernel = kernelBuilder.Build();
+    }
+
+    public void HandleSignal(Signal signal)
+    {
+        _signalProcessor.Handle(signal);
+    }
+
+    public async Task Start()
+    {
+        await HubConnection.StartAsync();
+
+        await HubConnection.InvokeAsync("CreatePuppet");
+
+        _signalProcessor.Start();
     }
 }

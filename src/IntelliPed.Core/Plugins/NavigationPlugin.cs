@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
-using System.Net.Http.Json;
 using IntelliPed.Core.Agents;
 using IntelliPed.FiveM.Messages.Navigation;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.SemanticKernel;
 
 namespace IntelliPed.Core.Plugins;
@@ -15,21 +15,13 @@ public class NavigationPlugin
         [Description("The co-ordinates.")] Coordinates coordinates)
     {
         Agent agent = kernel.GetRequiredService<Agent>();
-        HttpClient httpClient = new();
 
-        HttpResponseMessage response = await httpClient.PostAsJsonAsync("http://localhost:5000/api/navigation/move-to-position", new MoveToPositionRequest
+        await agent.HubConnection.InvokeAsync("MoveToPosition", new MoveToPositionRequest
         {
-            PedNetworkId = agent.PedNetworkId,
             X = coordinates.X,
             Y = coordinates.Y,
             Z = coordinates.Z,
         });
-
-        if (!response.IsSuccessStatusCode)
-        {
-            Console.WriteLine($"Failed to navigate to ({coordinates.X}, {coordinates.Y}, {coordinates.Z})");
-            return "Failed to navigate.";
-        }
 
         Console.WriteLine($"Successfully navigated to ({coordinates.X}, {coordinates.Y}, {coordinates.Z})");
         return "Successfully navigated.";
