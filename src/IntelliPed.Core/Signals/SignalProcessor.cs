@@ -33,7 +33,7 @@ public class SignalProcessor
         _cancellationTokenSource.Cancel();
     }
 
-    public void HandleSignal(Signal signal)
+    public void Handle(Signal signal)
     {
         _signalQueue.Enqueue(signal);
     }
@@ -58,7 +58,7 @@ public class SignalProcessor
             ChatMessageContent result = await chatService.GetChatMessageContentAsync(chat, new OpenAIPromptExecutionSettings
             {
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
-            });
+            }, cancellationToken: cancellationToken);
 
             Console.WriteLine($"Result: {result}");
         }

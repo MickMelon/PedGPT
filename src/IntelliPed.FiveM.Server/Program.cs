@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FxMediator.Server;
-using IntelliPed.FiveM.Server.Controllers;
 using IntelliPed.FiveM.Server.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,8 +13,6 @@ namespace IntelliPed.FiveM.Server;
 
 public class Program : BaseScript
 {
-    public static IServiceProvider Services { get; private set; } = null!;
-    public static IServiceProvider ScopedServices => Services.CreateScope().ServiceProvider;
     private IWebHost _host = null!;
 
     [EventHandler("onResourceStart")]
@@ -40,22 +36,17 @@ public class Program : BaseScript
             {
                 services.AddSingleton(baseScriptProxy);
                 services.AddSingleton<ServerMediator>();
-
                 services.AddSignalR();
             })
             .Configure(app =>
             {
-                app.UseCors();
-                app.UseMvcWithDefaultRoute();
                 app.UseSignalR(configure =>
                 {
-                    configure.MapHub<MyHub>("/my-hub");
+                    configure.MapHub<AgentHub>("/agent-hub");
                 });
             })
             .ConfigureLogging(_ => _.AddConsole())
             .Build();
-
-        Services = _host.Services;
 
         await Task.Run(_host.Run);
     }

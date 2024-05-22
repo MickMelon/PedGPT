@@ -1,15 +1,60 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Linq;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using FxMediator.Server;
+using IntelliPed.FiveM.Messages;
+using IntelliPed.FiveM.Messages.Navigation;
+using IntelliPed.FiveM.Server.Extensions;
+using IntelliPed.FiveM.Server.Util;
+using IntelliPed.FiveM.Shared.Requests.Puppets;
+using IntelliPed.FiveM.Shared.Requests.Navigation;
 
 namespace IntelliPed.FiveM.Server.Hubs;
 
-public class MyHub : Hub
+public class AgentHub : Hub<IAgentHub>, IAgentHub
 {
-    public async Task SendMessage(string user, string message)
+    private readonly ServerMediator _mediator;
+    private readonly BaseScriptProxy _baseScriptProxy;
+
+    public AgentHub(ServerMediator mediator, BaseScriptProxy baseScriptProxy)
     {
-        await BaseScript.Delay(0);
-        Debug.WriteLine($"From {user}: {message}");
-        await Clients.Caller.SendAsync("ReceiveMessage", user, message);
+        _mediator = mediator;
+        _baseScriptProxy = baseScriptProxy;
+    }
+
+    public async Task CreatePuppet()
+    {
+        await Functions.SwitchToMainThread();
+
+        Player player = _baseScriptProxy.Players.First();
+
+        CreatePuppetRpcReply reply = await _mediator.SendToClient(player, new CreatePuppetRpcRequest
+        {
+            X = 0f,
+            Y = 0f,
+            Z = 72f,
+        });
+
+        Context.Items.Add("PedNetworkId", reply.PedNetworkId);
+
+        Debug.WriteLine($"Created ped with ID {reply.PedNetworkId}");
+    }
+
+    public async Task MoveToPosition(MoveToPositionRequest request)
+    {
+        await Functions.SwitchToMainThread();
+
+        Player player = _baseScriptProxy.Players.First();
+
+        Debug.WriteLine($"Navigating to ({request.X}, {request.Y}, {request.Z})");
+
+        _mediator.SendToClient(player, new MoveToPositionRpcRequest
+        {
+            PedNetworkId = Context.GetPedNetworkId(),
+            X = request.X,
+            Y = request.Y,
+            Z = request.Z
+        });
     }
 }
