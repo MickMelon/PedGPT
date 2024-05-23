@@ -29,7 +29,9 @@ public class Agent
             .AddDebug()
             .AddConsole());
         kernelBuilder.AddOpenAIChatCompletion(openAiOptions.Model, openAiOptions.ApiKey, openAiOptions.OrgId);
-        kernelBuilder.Plugins.AddFromType<NavigationPlugin>();
+        kernelBuilder.Plugins
+            .AddFromType<NavigationPlugin>()
+            .AddFromType<SpeechPlugin>();
 
         Kernel = kernelBuilder.Build();
     }
