@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.13.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.13.0-alpha" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.13.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Planners.Handlebars" Version="1.13.0-preview" />
   </ItemGroup>
 
   <ItemGroup>
