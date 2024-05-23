@@ -38,6 +38,8 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
 
         Context.Items.Add("PedNetworkId", reply.PedNetworkId);
 
+        await Groups.AddToGroupAsync(Context.ConnectionId, reply.PedNetworkId.ToString());
+
         Debug.WriteLine($"Created ped with ID {reply.PedNetworkId}");
     }
 

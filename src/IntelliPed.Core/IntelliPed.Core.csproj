@@ -21,4 +21,8 @@
     <ProjectReference Include="..\IntelliPed.Messages\IntelliPed.Messages.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Sensors\" />
+  </ItemGroup>
+
 </Project>

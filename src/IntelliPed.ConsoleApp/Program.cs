@@ -1,5 +1,5 @@
 ﻿using IntelliPed.Core.Agents;
-using IntelliPed.Core.Signals;
+using IntelliPed.Core.Sensors;
 using Microsoft.Extensions.Configuration;
 
 IConfigurationBuilder configBuilder = new ConfigurationBuilder()
@@ -18,12 +18,7 @@ Agent agent = new(openAiOptions);
 
 await agent.Start();
 
-agent.HandleSignal(new DamageSignal
-{
-    DamageAmount = 1337,
-    Source = "Player",
-    Weapon = "Desert Eagle",
-});
+new DamageSensor(agent);
 
 // Create a ManualResetEventSlim to keep the application running
 ManualResetEventSlim waitHandle = new(false);
