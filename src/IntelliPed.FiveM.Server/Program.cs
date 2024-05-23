@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FxMediator.Server;
@@ -13,6 +14,8 @@ namespace IntelliPed.FiveM.Server;
 
 public class Program : BaseScript
 {
+    public static IServiceProvider Services { get; private set; } = null!;
+    public static IServiceProvider ScopedServices => Services.CreateScope().ServiceProvider;
     private IWebHost _host = null!;
 
     [EventHandler("onResourceStart")]
@@ -47,6 +50,8 @@ public class Program : BaseScript
             })
             .ConfigureLogging(_ => _.AddConsole())
             .Build();
+
+        Services = _host.Services;
 
         await Task.Run(_host.Run);
     }

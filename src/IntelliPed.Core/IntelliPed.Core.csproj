@@ -21,4 +21,8 @@
     <ProjectReference Include="..\IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Sensors\" />
+  </ItemGroup>
+
 </Project>
