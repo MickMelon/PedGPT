@@ -8,11 +8,10 @@ namespace IntelliPed.FiveM.Client.Scripts;
 
 public class NavigationScript : BaseScript
 {
-    private readonly ClientMediator _mediator = new();
-
     public NavigationScript()
     {
-        _mediator.AddRequestHandler<MoveToPositionRpcRequest>(OnMoveToPosition);
+        ClientMediator mediator = new();
+        mediator.AddRequestHandler<MoveToPositionRpcRequest>(OnMoveToPosition);
     }
 
     [EventHandler("FleeFrom")]
