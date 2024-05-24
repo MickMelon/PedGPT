@@ -53,12 +53,26 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
 
         Debug.WriteLine($"Agent connected: {agent}");
 
+        Functions.SendChatMessage($"Agent connected: {agent.PedNetworkId}");
+
         await base.OnConnectedAsync();
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        // TODO: Delete the ped.
+        await Functions.SwitchToMainThread();
+
+        Player player = _baseScriptProxy.Players.First();
+
+        ConnectedAgent agent = _connectedAgentService.Agents[Context.ConnectionId];
+
+        BaseScript.TriggerClientEvent(player, "DeletePuppet", agent.PedNetworkId);
+
+        _connectedAgentService.Agents.TryRemove(Context.ConnectionId, out _);
+
+        Debug.WriteLine($"Deleted puppet for agent {agent}");
+
+        Functions.SendChatMessage($"Agent disconnected: {agent.PedNetworkId}");
 
         await base.OnDisconnectedAsync(exception);
     }
@@ -69,8 +83,6 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
 
         Player player = _baseScriptProxy.Players.First();
 
-        Debug.WriteLine($"Navigating to ({request.X}, {request.Y}, {request.Z})");
-
         ConnectedAgent agent = _connectedAgentService.Agents[Context.ConnectionId];
 
         _mediator.SendToClient(player, new MoveToPositionRpcRequest
@@ -80,6 +92,8 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
             Y = request.Y,
             Z = request.Z
         });
+
+        Debug.WriteLine($"Navigating to ({request.X}, {request.Y}, {request.Z})");
     }
 
     public async Task Speak(SpeakRequest request)

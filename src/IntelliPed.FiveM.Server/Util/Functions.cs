@@ -9,4 +9,13 @@ public static class Functions
     {
         await BaseScript.Delay(0);
     }
+
+    public static void SendChatMessage(string message)
+    {
+        BaseScript.TriggerClientEvent("chat:addMessage", new
+        {
+            color = new[] { 255, 255, 255 },
+            args = new[] { "[IntelliPed]", message }
+        });
+    }
 }

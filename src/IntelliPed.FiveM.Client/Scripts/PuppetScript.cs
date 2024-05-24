@@ -15,6 +15,14 @@ public class PuppetScript : BaseScript
         _mediator.AddRequestHandler<CreatePuppetRpcRequest, CreatePuppetRpcReply>(OnCreatePuppet);
     }
 
+    [EventHandler("DeletePuppet")]
+    private void DeletePuppet(int pedNetworkId)
+    {
+        int handle = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+        API.DeleteEntity(ref handle);
+        Debug.WriteLine($"Deleted puppet with handle {handle}");
+    }
+
     private static async Task<CreatePuppetRpcReply> OnCreatePuppet(CreatePuppetRpcRequest request)
     {
         Debug.WriteLine("Creating puppet...");
