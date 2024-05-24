@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IntelliPed.FiveM.Client.Models;
 
 namespace IntelliPed.FiveM.Client.Scripts;
 
