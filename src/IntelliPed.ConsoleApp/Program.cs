@@ -19,6 +19,7 @@ Agent agent = new(openAiOptions);
 await agent.Start();
 
 new DamageSensor(agent);
+new SpeechSensor(agent);
 
 // Create a ManualResetEventSlim to keep the application running
 ManualResetEventSlim waitHandle = new(false);

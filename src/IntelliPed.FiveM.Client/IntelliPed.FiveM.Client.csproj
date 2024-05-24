@@ -62,8 +62,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rpc\NavigationRpc.cs" />
     <Compile Include="Rpc\PuppetRpc.cs" />
-    <Compile Include="Scripts\DamageScript.cs" />
-    <Compile Include="Scripts\SpeechScript.cs" />
     <Compile Include="Speech.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace IntelliPed.Core.Sensors;
 
-public class DamageSensor : Sensor
+public class DamageSensor
 {
     private readonly Agent _agent;
 
