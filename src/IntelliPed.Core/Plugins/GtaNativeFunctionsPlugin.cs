@@ -4,6 +4,14 @@ using Microsoft.SemanticKernel;
 
 namespace IntelliPed.Core.Plugins;
 
+/*
+ * The idea is to allow the agent to execute native GTA V functions.
+ * Still need to explore further.
+ *
+ * I think GPT has decent knowledge of GTA V natives, but it's not perfect.
+ * It would be good to embed documentation.
+ */
+
 public class GtaNativeFunctionsPlugin
 {
     [KernelFunction]
