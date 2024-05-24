@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Json;
-using IntelliPed.Core.Agents;
-using IntelliPed.FiveM.Messages.Puppets;
+﻿using IntelliPed.Core.Agents;
 using Microsoft.Extensions.Configuration;
 
 IConfigurationBuilder configBuilder = new ConfigurationBuilder()
@@ -12,17 +10,13 @@ OpenAiOptions openAiOptions = new()
 {
     ApiKey = config["OpenAi:ApiKey"] ?? throw new InvalidOperationException("OpenAi:ApiKey is required"),
     OrgId = config["OpenAi:OrgId"] ?? throw new InvalidOperationException("OpenAi:ApiKey is required"),
-    Model = "gpt-4o"
+    Model = "gpt-3.5-turbo-0125"
 };
 
-HttpClient httpClient = new();
+Agent agent = new(openAiOptions);
 
-HttpResponseMessage response = await httpClient.PostAsync("http://localhost:5000/api/puppet", null);
+await agent.Start();
 
-response.EnsureSuccessStatusCode();
-
-CreatePuppetReply? reply = await response.Content.ReadFromJsonAsync<CreatePuppetReply>();
-
-Agent agent = new(reply!.PedNetworkId, openAiOptions);
-
-await agent.Think();
+// Create a ManualResetEventSlim to keep the application running
+ManualResetEventSlim waitHandle = new(false);
+waitHandle.Wait();

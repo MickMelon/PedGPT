@@ -16,13 +16,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.15" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.15" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj" />
     <ProjectReference Include="..\IntelliPed.FiveM.Shared\IntelliPed.FiveM.Shared.csproj" />
+    <ProjectReference Include="..\IntelliPed.Messages\IntelliPed.Messages.csproj" />
   </ItemGroup>
 
   <ItemGroup>

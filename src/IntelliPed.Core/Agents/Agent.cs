@@ -1,69 +1,51 @@
 ﻿using IntelliPed.Core.Plugins;
+using IntelliPed.Core.Signals;
+using IntelliPed.Messages.Signals;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Planning.Handlebars;
-
-#pragma warning disable SKEXP0060
 
 namespace IntelliPed.Core.Agents;
 
 public class Agent
 {
-    public int PedNetworkId { get; }
+    public Kernel Kernel { get; }
+    public HubConnection HubConnection { get; }
+    private readonly SignalProcessor _signalProcessor;
 
-    private readonly Kernel _kernel;
-    
-    public Agent(int pedNetworkId, OpenAiOptions openAiOptions)
+    public Agent(OpenAiOptions openAiOptions)
     {
-        PedNetworkId = pedNetworkId;
+        _signalProcessor = new(this);
+
+        HubConnection = new HubConnectionBuilder()
+            .WithUrl("http://localhost:5000/agent-hub")
+            .Build();
 
         IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
 
         kernelBuilder.Services.AddSingleton(this);
-
         kernelBuilder.Services.AddLogging(_ => _
             .SetMinimumLevel(LogLevel.Trace)
             .AddDebug()
             .AddConsole());
-
         kernelBuilder.AddOpenAIChatCompletion(openAiOptions.Model, openAiOptions.ApiKey, openAiOptions.OrgId);
-        kernelBuilder.Plugins.AddFromType<NavigationPlugin>();
+        kernelBuilder.Plugins
+            .AddFromType<NavigationPlugin>()
+            .AddFromType<SpeechPlugin>();
 
-        _kernel = kernelBuilder.Build();
+        Kernel = kernelBuilder.Build();
     }
 
-    /// <summary>
-    /// The agent thinks about its current state and goals.
-    /// </summary>
-    public async Task Think()
+    public async Task Start()
     {
-        // Give the LLM its current state, goals, sensor information, etc. and let it think.
-        HandlebarsPlanner planner = new();
-        HandlebarsPlan plan = await planner.CreatePlanAsync(_kernel, "Travel to Grove Street.");
-        
-        Console.WriteLine("\nThe plan:\n");
-        Console.WriteLine(plan);
-        Console.WriteLine("\n====================\n");
+        await HubConnection.StartAsync();
 
-        string result = await plan.InvokeAsync(_kernel);
-        Console.WriteLine("The result:\n");
-        Console.WriteLine(result);
-    }
+        await HubConnection.InvokeAsync("CreatePuppet");
 
-    /// <summary>
-    /// The agent acts on its current state and goals.
-    /// </summary>
-    public async Task Act()
-    {
+        HubConnection.On<DamageSignal>("DamageReceived", _signalProcessor.Handle);
+        HubConnection.On<SpeechSignal>("SpeechHeard", _signalProcessor.Handle);
 
-    }
-
-    /// <summary>
-    /// The agent observes its environment.
-    /// </summary>
-    public async Task Observe()
-    {
-
+        _signalProcessor.Start();
     }
 }

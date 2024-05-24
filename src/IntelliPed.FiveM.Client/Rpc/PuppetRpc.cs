@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core;
+﻿using System.Threading.Tasks;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FxMediator.Client;
 using IntelliPed.FiveM.Shared.Requests.Puppets;
@@ -14,11 +15,24 @@ public class PuppetRpc : BaseScript
         _mediator.AddRequestHandler<CreatePuppetRpcRequest, CreatePuppetRpcReply>(OnCreatePuppet);
     }
 
-    private static CreatePuppetRpcReply OnCreatePuppet(CreatePuppetRpcRequest request)
+    private static async Task<CreatePuppetRpcReply> OnCreatePuppet(CreatePuppetRpcRequest request)
     {
         Debug.WriteLine("Creating puppet...");
 
-        int pedHandle = API.CreatePed(0, (uint)API.GetHashKey("csb_agent"), request.X, request.Y, request.Z, 0f, true, true);
+        int count = 0;
+        while (!API.HasModelLoaded((uint)API.GetHashKey("csb_agent")) && count < 100)
+        {
+            API.RequestModel((uint)API.GetHashKey("csb_agent"));
+            await Delay(10);
+            count++;
+        }
+
+        int pedHandle = API.CreatePed(0, (uint)API.GetHashKey("csb_agent"), request.X, request.Y, request.Z, 0f, true, false);
+
+        if (pedHandle == 0)
+        {
+            Debug.WriteLine("ERROR: Failed to create ped!");
+        }
 
         Ped ped = new(pedHandle)
         {

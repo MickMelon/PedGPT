@@ -1,8 +1,7 @@
-﻿namespace IntelliPed.FiveM.Messages.Navigation;
+﻿namespace IntelliPed.Messages.Navigation;
 
 public record MoveToPositionRequest
 {
-    public required int PedNetworkId { get; init; }
     public required float X { get; init; }    
     public required float Y { get; init; }    
     public required float Z { get; init; }

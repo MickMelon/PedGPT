@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core;
+﻿using System.Collections.Generic;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
 namespace IntelliPed.FiveM.Client;
@@ -19,6 +20,12 @@ public class Program : BaseScript
         API.SetEntityCoords(API.PlayerPedId(), 0f, 0f, 72f, false, false, false, false);
 
         Debug.WriteLine("Client resource started");
+    }
+
+    [EventHandler("gameEventTriggered")]
+    public void OnGameEventTriggered(string name, List<dynamic> data)
+    {
+        Debug.WriteLine($"Game event triggered: {name} | {string.Join(", ", data)}");
     }
 
     //[Tick]
