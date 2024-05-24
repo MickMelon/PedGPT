@@ -6,7 +6,7 @@ namespace IntelliPed.Messages;
 
 public interface IAgentHub
 {
-    Task CreatePuppet();
     Task MoveToPosition(MoveToPositionRequest request);
     Task Speak(SpeakRequest request);
+    Task FleeFrom(FleeFromRequest request);
 }

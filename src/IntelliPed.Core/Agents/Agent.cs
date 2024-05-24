@@ -1,5 +1,6 @@
 ﻿using IntelliPed.Core.Plugins;
 using IntelliPed.Core.Signals;
+using IntelliPed.Messages.Heartbeats;
 using IntelliPed.Messages.Signals;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +13,14 @@ public class Agent
 {
     public Kernel Kernel { get; }
     public HubConnection HubConnection { get; }
+    public PersonalInfo PersonalInfo { get; }
+    public Heartbeat LatestHeartbeat { get; private set; }
+
     private readonly SignalProcessor _signalProcessor;
 
-    public Agent(OpenAiOptions openAiOptions)
+    public Agent(PersonalInfo personalInfo, OpenAiOptions openAiOptions)
     {
+        PersonalInfo = personalInfo;
         _signalProcessor = new(this);
 
         HubConnection = new HubConnectionBuilder()
@@ -45,11 +50,15 @@ public class Agent
     {
         await HubConnection.StartAsync();
 
-        await HubConnection.InvokeAsync("CreatePuppet");
-
         HubConnection.On<DamageSignal>("DamageReceived", _signalProcessor.Handle);
         HubConnection.On<SpeechSignal>("SpeechHeard", _signalProcessor.Handle);
+        HubConnection.On<Heartbeat>("Heartbeat", Heartbeat);
 
         _signalProcessor.Start();
+    }
+
+    private void Heartbeat(Heartbeat heartbeat)
+    {
+        LatestHeartbeat = heartbeat;
     }
 }
