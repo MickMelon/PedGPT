@@ -59,6 +59,7 @@
     <Compile Include="Models\TextDraw.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\AgentStatusScript.cs" />
     <Compile Include="Scripts\DamageScript.cs" />
     <Compile Include="Scripts\NavigationScript.cs" />
     <Compile Include="Scripts\PuppetScript.cs" />

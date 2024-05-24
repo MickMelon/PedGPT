@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using IntelliPed.Messages.AgentStatus;
 using IntelliPed.Messages.Navigation;
 using IntelliPed.Messages.Speech;
 
@@ -9,4 +10,5 @@ public interface IAgentHub
     Task MoveToPosition(MoveToPositionRequest request);
     Task Speak(SpeakRequest request);
     Task FleeFrom(FleeFromRequest request);
+    Task SetAgentStatus(SetAgentStatusRequest request);
 }

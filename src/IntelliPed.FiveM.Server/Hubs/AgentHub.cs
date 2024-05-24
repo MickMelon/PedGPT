@@ -9,6 +9,7 @@ using IntelliPed.FiveM.Server.Util;
 using IntelliPed.FiveM.Shared.Requests.Puppets;
 using IntelliPed.FiveM.Shared.Requests.Navigation;
 using IntelliPed.Messages;
+using IntelliPed.Messages.AgentStatus;
 using IntelliPed.Messages.Navigation;
 using IntelliPed.Messages.Speech;
 
@@ -120,5 +121,18 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
         ConnectedAgent agent = _connectedAgentService.Agents[Context.ConnectionId];
 
         BaseScript.TriggerClientEvent(player, "FleeFrom", agent.PedNetworkId, request.PedNetworkId);
+    }
+
+    public async Task SetAgentStatus(SetAgentStatusRequest request)
+    {
+        await Functions.SwitchToMainThread();
+
+        Player player = _baseScriptProxy.Players.First();
+
+        Debug.WriteLine($"Setting agent status: {request}");
+
+        ConnectedAgent agent = _connectedAgentService.Agents[Context.ConnectionId];
+
+        BaseScript.TriggerClientEvent(player, "AgentStatus:SetThinking", agent.PedNetworkId, request.IsThinking);
     }
 }
