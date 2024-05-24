@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using IntelliPed.Core.Agents;
-using IntelliPed.FiveM.Messages;
+using IntelliPed.Messages;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.SemanticKernel;
 
