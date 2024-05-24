@@ -52,16 +52,22 @@ public class SignalProcessor
             IChatCompletionService chatService = _agent.Kernel.GetRequiredService<IChatCompletionService>();
 
             ChatHistory chat = new(
-                """
+                $"""
                  You are a ped in Grand Theft Auto V who is fully autonomous. Your goals are to freeroam. 
                  
                  Your decisions must always be made independently without seeking user assistance. 
                  Play to your strengths as an LLM and pursue simple strategies with no legal complications.
                  
                  You must make use of your reasoning and decision-making capabilities to respond to the signal.
-                 Be realistic and think about what a ped would do in this situation.
+                 Be realistic and think about what a ped - and more specifically, your character - would do in this situation.
                  
                  You may invoke kernel functions.
+                 
+                 == Your Character Personal Information ==
+                 {_agent.PersonalInfo}
+                 
+                 == Your Current Status ==
+                 {_agent.LatestHeartbeat}
                  """);
 
             chat.AddUserMessage(signal.ToString());

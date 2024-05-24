@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
@@ -19,6 +21,8 @@ public class Program : BaseScript
         API.SetMaxWantedLevel(0);
         API.SetEntityCoords(API.PlayerPedId(), 0f, 0f, 72f, false, false, false, false);
 
+        API.NetworkOverrideClockTime(12, 0, 0);
+
         Debug.WriteLine("Client resource started");
     }
 
@@ -28,15 +32,17 @@ public class Program : BaseScript
         Debug.WriteLine($"Game event triggered: {name} | {string.Join(", ", data)}");
     }
 
-    //[Tick]
-    //public async Task OnTick()
-    //{
-    //    // Disable the wanted level
-    //    API.SetPlayerWantedLevel(API.PlayerId(), 0, false);
-    //    API.SetPlayerWantedLevelNow(API.PlayerId(), false);
+    [Tick]
+    public Task OnTick()
+    {
+        // Disable the wanted level
+        //API.SetPlayerWantedLevel(API.PlayerId(), 0, false);
+        //API.SetPlayerWantedLevelNow(API.PlayerId(), false);
+        //await Delay(1000); // Wait for 1 second before checking again
 
-    //    await Delay(1000); // Wait for 1 second before checking again
-    //}
+        API.RestorePlayerStamina(API.PlayerId(), 1);
+        return Task.FromResult(0);
+    }
 
     [Command("gun")]
     public void GiveGun()

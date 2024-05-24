@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using IntelliPed.Core.Agents;
+using IntelliPed.Messages.Common;
 using IntelliPed.Messages.Navigation;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.SemanticKernel;
@@ -31,25 +32,27 @@ public class NavigationPlugin
     [Description("Returns the co-ordinates of the specified location.")]
     [return: Description("The co-ordinates of the location in the format of: (x, y, z).")]
     public async Task<Coordinates> GetLocation(
-        Kernel kernel,
         [Description("The location.")] string location)
     {
         await Task.Delay(250);
         Console.WriteLine($"The co-ordinates of {location} are (-831, 172, 70)");
         return new Coordinates(-831, 172, 70);
     }
-}
 
-public class Coordinates
-{
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
-
-    public Coordinates(float x, float y, float z)
+    [KernelFunction]
+    [Description("Flees from the specified ped.")]
+    public async Task<string> FleeFrom(
+        Kernel kernel,
+        [Description("The network ID of the ped to flee from.")] int pedNetworkIdToFleeFrom)
     {
-        X = x;
-        Y = y;
-        Z = z;
+        Agent agent = kernel.GetRequiredService<Agent>();
+
+        await agent.HubConnection.InvokeAsync("FleeFrom", new FleeFromRequest
+        {
+            PedNetworkId = pedNetworkIdToFleeFrom,
+        });
+
+        Console.WriteLine($"Fleeing from {pedNetworkIdToFleeFrom}");
+        return $"You have started fleeing from the ped with network id {pedNetworkIdToFleeFrom}";
     }
 }

@@ -4,6 +4,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FxMediator.Server;
 using IntelliPed.FiveM.Server.Hubs;
+using IntelliPed.FiveM.Server.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,7 @@ public class Program : BaseScript
             {
                 services.AddSingleton(baseScriptProxy);
                 services.AddSingleton<ServerMediator>();
+                services.AddSingleton<ConnectedAgentService>();
                 services.AddSignalR();
             })
             .Configure(app =>
