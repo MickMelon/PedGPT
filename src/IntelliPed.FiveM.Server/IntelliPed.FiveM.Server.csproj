@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj" />
     <ProjectReference Include="..\IntelliPed.FiveM.Shared\IntelliPed.FiveM.Shared.csproj" />
+    <ProjectReference Include="..\IntelliPed.Messages\IntelliPed.Messages.csproj" />
   </ItemGroup>
 
   <ItemGroup>

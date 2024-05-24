@@ -1,4 +1,4 @@
-﻿namespace IntelliPed.FiveM.Messages.Puppets;
+﻿namespace IntelliPed.Messages.Puppets;
 
 public record CreatePuppetReply
 {

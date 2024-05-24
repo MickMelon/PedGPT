@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using FxMediator.Server;
-using IntelliPed.FiveM.Messages;
-using IntelliPed.FiveM.Messages.Navigation;
 using IntelliPed.FiveM.Server.Extensions;
 using IntelliPed.FiveM.Server.Util;
 using IntelliPed.FiveM.Shared.Requests.Puppets;
 using IntelliPed.FiveM.Shared.Requests.Navigation;
+using IntelliPed.Messages;
+using IntelliPed.Messages.Navigation;
+using IntelliPed.Messages.Speech;
 
 namespace IntelliPed.FiveM.Server.Hubs;
 

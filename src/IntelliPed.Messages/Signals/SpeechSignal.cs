@@ -1,4 +1,4 @@
-﻿namespace IntelliPed.Core.Signals;
+﻿namespace IntelliPed.Messages.Signals;
 
 public record SpeechSignal : Signal
 {

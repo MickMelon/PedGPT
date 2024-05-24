@@ -1,4 +1,4 @@
-﻿namespace IntelliPed.FiveM.Messages;
+﻿namespace IntelliPed.Messages.Speech;
 
 public record SpeakRequest
 {

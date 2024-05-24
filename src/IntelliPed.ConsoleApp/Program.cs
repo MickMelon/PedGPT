@@ -1,5 +1,4 @@
 ﻿using IntelliPed.Core.Agents;
-using IntelliPed.Core.Sensors;
 using Microsoft.Extensions.Configuration;
 
 IConfigurationBuilder configBuilder = new ConfigurationBuilder()
@@ -17,9 +16,6 @@ OpenAiOptions openAiOptions = new()
 Agent agent = new(openAiOptions);
 
 await agent.Start();
-
-new DamageSensor(agent);
-new SpeechSensor(agent);
 
 // Create a ManualResetEventSlim to keep the application running
 ManualResetEventSlim waitHandle = new(false);

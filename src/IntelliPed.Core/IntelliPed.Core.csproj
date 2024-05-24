@@ -16,11 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelliPed.FiveM.Messages\IntelliPed.FiveM.Messages.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Sensors\" />
+    <ProjectReference Include="..\IntelliPed.Messages\IntelliPed.Messages.csproj" />
   </ItemGroup>
 
 </Project>

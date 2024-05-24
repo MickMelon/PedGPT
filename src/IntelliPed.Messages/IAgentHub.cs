@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using IntelliPed.FiveM.Messages.Navigation;
+using IntelliPed.Messages.Navigation;
+using IntelliPed.Messages.Speech;
 
-namespace IntelliPed.FiveM.Messages;
+namespace IntelliPed.Messages;
 
 public interface IAgentHub
 {

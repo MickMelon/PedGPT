@@ -1,5 +1,6 @@
 ﻿using IntelliPed.Core.Plugins;
 using IntelliPed.Core.Signals;
+using IntelliPed.Messages.Signals;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,16 +37,14 @@ public class Agent
         Kernel = kernelBuilder.Build();
     }
 
-    public void HandleSignal(Signal signal)
-    {
-        _signalProcessor.Handle(signal);
-    }
-
     public async Task Start()
     {
         await HubConnection.StartAsync();
 
         await HubConnection.InvokeAsync("CreatePuppet");
+
+        HubConnection.On<DamageSignal>("DamageReceived", _signalProcessor.Handle);
+        HubConnection.On<SpeechSignal>("SpeechHeard", _signalProcessor.Handle);
 
         _signalProcessor.Start();
     }

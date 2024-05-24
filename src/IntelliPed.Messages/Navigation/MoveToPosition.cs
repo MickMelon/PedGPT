@@ -1,4 +1,4 @@
-﻿namespace IntelliPed.FiveM.Messages.Navigation;
+﻿namespace IntelliPed.Messages.Navigation;
 
 public record MoveToPositionRequest
 {

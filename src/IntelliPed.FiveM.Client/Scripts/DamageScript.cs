@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using CitizenFX.Core;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using CitizenFX.Core;
 
-namespace IntelliPed.FiveM.Client;
+namespace IntelliPed.FiveM.Client.Scripts;
 
-public class DamageDetector : BaseScript
+public class DamageScript : BaseScript
 {
     private readonly Dictionary<int, int> _pedHealths = [];
 
