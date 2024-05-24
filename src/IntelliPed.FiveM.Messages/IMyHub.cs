@@ -7,4 +7,5 @@ public interface IAgentHub
 {
     Task CreatePuppet();
     Task MoveToPosition(MoveToPositionRequest request);
+    Task Speak(SpeakRequest request);
 }

@@ -59,4 +59,15 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
             Z = request.Z
         });
     }
+
+    public async Task Speak(SpeakRequest request)
+    {
+        await Functions.SwitchToMainThread();
+
+        Player player = _baseScriptProxy.Players.First();
+
+        Debug.WriteLine($"Saying: {request.Message}");
+
+        BaseScript.TriggerClientEvent(player, "Speech", Context.GetPedNetworkId(), request.Message);
+    }
 }
