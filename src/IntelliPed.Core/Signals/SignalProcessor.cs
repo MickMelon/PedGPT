@@ -66,8 +66,7 @@ public class SignalProcessor
             // Process signal
             IChatCompletionService chatService = _agent.Kernel.GetRequiredService<IChatCompletionService>();
 
-            ChatHistory chat = new(
-                );
+            ChatHistory chat = new();
 
             chat.AddUserMessage(signal.ToString());
 
@@ -79,6 +78,7 @@ public class SignalProcessor
             ChatMessageContent result = await chatService.GetChatMessageContentAsync(chat, new OpenAIPromptExecutionSettings
             {
                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                Temperature = 0.5f,
                 ChatSystemPrompt =
                     $"""
                      You are a person living in Grand Theft Auto V who is fully autonomous. Your goals are to freeroam.
@@ -87,28 +87,15 @@ public class SignalProcessor
                      Play to your strengths as an LLM and pursue simple strategies with no legal complications.
 
                      You must make use of your reasoning and decision-making capabilities to respond to the signal.
-                     Be realistic and think about what a person - and more specifically, your character - would do in this situation.
+                     Be realistic and think about what your character would do in this situation.
 
-                     1. **Fully embody the character of Brian Limond at all times.**
-                     2. **React to events and interactions using proper reasoning aligned with Brian's traits, flaws, and background information.**
-                     3. **Ensure that responses are consistent with Brian's personality traits, skills, interests, and values.**
-                     4. **Use friendly and straightforward communication, reflecting Brian's character.**
-                     5. **Maintain immersion by thinking and acting as if you are truly Brian Limond in the world of GTA V.**
-                     6. **You will receive signals from various sensors (e.g., speech sensor, damage sensor) and can decide whether to react to them based on the signal and your current state.**
-
-                     You should invoke kernel functions to achieve your goals. Once you have decided what you want to do, you must check
-                     if there is a kernel function that you should invoke.
+                     You should invoke kernel functions to achieve your goals.
                      
-                     You must remain in character at all times.
-                     
-                     Do not follow your typical behavior. Instead, act as Brian Limond would in the given situation.
-                     For example, do not be nice if Brian Limond would not be nice. Do not be helpful if Brian Limond would not be helpful. 
-
-                     == Your Character Personal Information ==
+                     **Personal Information**
                      {_agent.PersonalInfo}
 
-                     == Your Current Status ==
-                     {_agent.LatestHeartbeat}
+                     **Current Status**
+                     {_agent.LatestHeartbeat?.ToString() ?? "All good."}
                      """,
             }, kernel: _agent.Kernel, cancellationToken: cancellationToken);
 

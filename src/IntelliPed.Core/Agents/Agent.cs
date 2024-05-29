@@ -14,7 +14,7 @@ public class Agent
     public Kernel Kernel { get; }
     public HubConnection HubConnection { get; }
     public PersonalInfo PersonalInfo { get; }
-    public Heartbeat LatestHeartbeat { get; private set; }
+    public Heartbeat? LatestHeartbeat { get; private set; }
 
     private readonly SignalProcessor _signalProcessor;
 
