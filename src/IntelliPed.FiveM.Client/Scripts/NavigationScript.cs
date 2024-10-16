@@ -1,18 +1,28 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
+using CitizenFX.Core;
 using FxMediator.Client;
 using IntelliPed.FiveM.Shared.Requests.Navigation;
 using System.Threading.Tasks;
 
-namespace IntelliPed.FiveM.Client.Rpc;
+namespace IntelliPed.FiveM.Client.Scripts;
 
-public class NavigationRpc : BaseScript
+public class NavigationScript : BaseScript
 {
-    private readonly ClientMediator _mediator = new();
-
-    public NavigationRpc()
+    public NavigationScript()
     {
-        _mediator.AddRequestHandler<MoveToPositionRpcRequest>(OnMoveToPosition);
+        ClientMediator mediator = new();
+        mediator.AddRequestHandler<MoveToPositionRpcRequest>(OnMoveToPosition);
+    }
+
+    [EventHandler("FleeFrom")]
+    private void OnFleeFrom(int fleeingPedNetworkId, int fleeFromPedNetworkId)
+    {
+        Ped fleeingPed = (Ped)Entity.FromNetworkId(fleeingPedNetworkId);
+        Ped fleeFromPed = (Ped)Entity.FromNetworkId(fleeFromPedNetworkId);
+
+        fleeingPed.Task.FleeFrom(fleeFromPed);
+
+        Debug.WriteLine($"Ped {fleeingPedNetworkId} is fleeing from ped {fleeFromPedNetworkId}");
     }
 
     private static async Task OnMoveToPosition(MoveToPositionRpcRequest request)
@@ -22,7 +32,7 @@ public class NavigationRpc : BaseScript
         await RequestControlOfEntity(request.PedNetworkId);
 
         Ped ped = new(API.NetworkGetEntityFromNetworkId(request.PedNetworkId));
-        
+
         API.TaskGoToCoordAnyMeansExtraParams(ped.Handle, request.X, request.Y, request.Z, 3f, 0, false, 786603, 0f, 0, 0, 0);
     }
 

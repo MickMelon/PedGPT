@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using IntelliPed.Core.Agents;
+using IntelliPed.Messages.AgentStatus;
 using IntelliPed.Messages.Signals;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -22,8 +24,21 @@ public class SignalProcessor
     public void Start()
     {
         if (IsProcessing) throw new InvalidOperationException("Signal processor is already running.");
+
         IsProcessing = true;
-        Task.Run(() => ProcessSignals(_cancellationTokenSource.Token));
+
+        CancellationToken cancellationToken = _cancellationTokenSource.Token;
+        cancellationToken.Register(() =>
+        {
+            Task task = _agent.HubConnection.InvokeAsync("SetAgentStatus", new SetAgentStatusRequest
+            {
+                IsThinking = false
+            }, CancellationToken.None);
+
+            task.Wait(CancellationToken.None);
+        });
+
+        Task.Run(() => ProcessSignals(cancellationToken), cancellationToken);
     }
 
     public void Stop()
@@ -51,25 +66,43 @@ public class SignalProcessor
             // Process signal
             IChatCompletionService chatService = _agent.Kernel.GetRequiredService<IChatCompletionService>();
 
-            ChatHistory chat = new(
-                """
-                 You are a ped in Grand Theft Auto V who is fully autonomous. Your goals are to freeroam. 
-                 
-                 Your decisions must always be made independently without seeking user assistance. 
-                 Play to your strengths as an LLM and pursue simple strategies with no legal complications.
-                 
-                 You must make use of your reasoning and decision-making capabilities to respond to the signal.
-                 Be realistic and think about what a ped would do in this situation.
-                 
-                 You may invoke kernel functions.
-                 """);
+            ChatHistory chat = new();
 
             chat.AddUserMessage(signal.ToString());
 
+            await _agent.HubConnection.InvokeAsync("SetAgentStatus", new SetAgentStatusRequest
+            {
+                IsThinking = true
+            }, cancellationToken);
+
             ChatMessageContent result = await chatService.GetChatMessageContentAsync(chat, new OpenAIPromptExecutionSettings
             {
-                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
+                ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+                Temperature = 0.5f,
+                ChatSystemPrompt =
+                    $"""
+                     You are a person living in Grand Theft Auto V who is fully autonomous. Your goals are to freeroam.
+
+                     Your decisions must always be made independently without seeking user assistance.
+                     Play to your strengths as an LLM and pursue simple strategies with no legal complications.
+
+                     You must make use of your reasoning and decision-making capabilities to respond to the signal.
+                     Be realistic and think about what your character would do in this situation.
+
+                     You should invoke kernel functions to achieve your goals.
+                     
+                     **Personal Information**
+                     {_agent.PersonalInfo}
+
+                     **Current Status**
+                     {_agent.LatestHeartbeat?.ToString() ?? "All good."}
+                     """,
             }, kernel: _agent.Kernel, cancellationToken: cancellationToken);
+
+            await _agent.HubConnection.InvokeAsync("SetAgentStatus", new SetAgentStatusRequest
+            {
+                IsThinking = false
+            }, cancellationToken);
 
             Console.WriteLine($"Result: {result}");
         }

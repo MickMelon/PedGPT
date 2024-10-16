@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.8202\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.10230\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="FxMediator.Client.net">
       <HintPath>..\..\..\FxMediator\src\FxMediator.Client\bin\Debug\FxMediator.Client.net.dll</HintPath>
@@ -53,15 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\PedExtensions.cs" />
     <Compile Include="MarkerClass.cs" />
     <Compile Include="Models\Color.cs" />
     <Compile Include="Models\PedTextDraw.cs" />
     <Compile Include="Models\TextDraw.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rpc\NavigationRpc.cs" />
-    <Compile Include="Rpc\PuppetRpc.cs" />
+    <Compile Include="Scripts\AgentStatusScript.cs" />
     <Compile Include="Scripts\DamageScript.cs" />
+    <Compile Include="Scripts\HeartbeatScript.cs" />
+    <Compile Include="Scripts\NavigationScript.cs" />
+    <Compile Include="Scripts\PuppetScript.cs" />
     <Compile Include="Scripts\SpeechScript.cs" />
     <Compile Include="Speech.cs" />
   </ItemGroup>
@@ -72,6 +75,10 @@
     <ProjectReference Include="..\IntelliPed.FiveM.Shared\IntelliPed.FiveM.Shared.csproj">
       <Project>{25E9A728-BA59-4DC7-AD4A-2D4BA154EE22}</Project>
       <Name>IntelliPed.FiveM.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntelliPed.Messages\IntelliPed.Messages.csproj">
+      <Project>{8C3E55A3-6518-45EF-A7E2-F84CBAB064BE}</Project>
+      <Name>IntelliPed.Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
