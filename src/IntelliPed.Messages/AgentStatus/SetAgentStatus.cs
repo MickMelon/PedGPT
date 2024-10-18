@@ -2,5 +2,13 @@
 
 public record SetAgentStatusRequest
 {
-    public required bool IsThinking { get; init; }
+    public required EnAgentStatus Status { get; init; }
+}
+
+public enum EnAgentStatus
+{
+    None,
+    Thinking,
+    Acting,
+    Observing,
 }

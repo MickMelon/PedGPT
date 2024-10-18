@@ -133,6 +133,6 @@ public class AgentHub : Hub<IAgentHub>, IAgentHub
 
         ConnectedAgent agent = _connectedAgentService.Agents[Context.ConnectionId];
 
-        BaseScript.TriggerClientEvent(player, "AgentStatus:SetThinking", agent.PedNetworkId, request.IsThinking);
+        BaseScript.TriggerClientEvent(player, "AgentStatus:Set", agent.PedNetworkId, request.Status);
     }
 }

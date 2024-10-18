@@ -10,40 +10,35 @@ namespace IntelliPed.Core.Plugins;
 public class NavigationPlugin
 {
     [KernelFunction]
-    [Description("Navigates to the specified co-ordinates.")]
-    public async Task<string> NavigateTo(
-        Kernel kernel,
-        [Description("The co-ordinates.")] Coordinates coordinates)
+    [Description("Navigates to the specified coords.")]
+    public static async Task<string> NavigateTo(Kernel kernel, Coordinates coords)
     {
         Agent agent = kernel.GetRequiredService<Agent>();
 
         await agent.HubConnection.InvokeAsync("MoveToPosition", new MoveToPositionRequest
         {
-            X = coordinates.X,
-            Y = coordinates.Y,
-            Z = coordinates.Z,
+            X = coords.X,
+            Y = coords.Y,
+            Z = coords.Z,
         });
 
-        Console.WriteLine($"Successfully navigated to ({coordinates.X}, {coordinates.Y}, {coordinates.Z})");
-        return "Successfully navigated.";
+        Console.WriteLine($"Successfully navigated to {coords}.");
+        return $"Successfully navigated to {coords}.";
     }
 
     [KernelFunction]
-    [Description("Returns the co-ordinates of the specified location.")]
-    [return: Description("The co-ordinates of the location in the format of: (x, y, z).")]
-    public async Task<Coordinates> GetLocation(
-        [Description("The location.")] string location)
+    [Description("Gets the coords for a location.")]
+    [return: Description("Coords: (x, y, z)")]
+    public static async Task<Coordinates> GetLocation(string locationName)
     {
         await Task.Delay(250);
-        Console.WriteLine($"The co-ordinates of {location} are (-831, 172, 70)");
+        Console.WriteLine($"The co-ordinates of '{locationName}' are (-831, 172, 70)");
         return new Coordinates(-831, 172, 70);
     }
 
     [KernelFunction]
-    [Description("Flees from the specified ped.")]
-    public async Task<string> FleeFrom(
-        Kernel kernel,
-        [Description("The network ID of the ped to flee from.")] int pedNetworkIdToFleeFrom)
+    [Description("Flees from a ped.")]
+    public static async Task<string> FleeFrom(Kernel kernel, int pedNetworkIdToFleeFrom)
     {
         Agent agent = kernel.GetRequiredService<Agent>();
 
